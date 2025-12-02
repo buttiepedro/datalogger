@@ -10,17 +10,33 @@ def create_app():
     # Inicializar DB
     db.init_app(app)
 
-    # Swagger UI
+    # Configuración completa para Swagger
     swagger_config = {
         "headers": [],
-        "title": "API Sensores - Documentación",
-        "version": "1.0.0",
-        "uiversion": 3,
+        "specs": [
+            {
+                "endpoint": "apispec",
+                "route": "/apispec.json",
+                "rule_filter": lambda rule: True,   # incluir todas las rutas
+                "model_filter": lambda tag: True,
+            }
+        ],
+        "static_url_path": "/flasgger_static",
+        "swagger_ui": True,
+        "specs_route": "/apidocs/",  # ruta principal del front swagger
     }
 
-    Swagger(app, config=swagger_config)
+    swagger_template = {
+        "info": {
+            "title": "API Sensores",
+            "description": "Documentación automática de la API",
+            "version": "1.0.0",
+        }
+    }
 
-    # Importar Blueprints centralizados en routes/__init__.py
+    Swagger(app, config=swagger_config, template=swagger_template)
+
+    # Importar Blueprints desde routes/__init__.py
     from .routes import (
         unidades_bp,
         tipo_sensor_bp,
@@ -28,7 +44,7 @@ def create_app():
         mediciones_bp
     )
 
-    # Registrar rutas
+    # Registrar Blueprints
     app.register_blueprint(unidades_bp, url_prefix="/unidades")
     app.register_blueprint(tipo_sensor_bp, url_prefix="/tipo_sensor")
     app.register_blueprint(sensores_bp, url_prefix="/sensores")
