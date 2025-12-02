@@ -1,42 +1,46 @@
 from flask import Flask
-from flasgger import Swagger
 from .config import Config
 from .database import db
+from flasgger import Swagger
 
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
 
-    # Inicializar DB
     db.init_app(app)
 
-    # Configuración completa para Swagger
+    # Swagger config
     swagger_config = {
         "headers": [],
         "specs": [
             {
                 "endpoint": "apispec",
                 "route": "/apispec.json",
-                "rule_filter": lambda rule: True,   # incluir todas las rutas
+                "rule_filter": lambda rule: True,
                 "model_filter": lambda tag: True,
+                "swagger_ui": True
             }
         ],
         "static_url_path": "/flasgger_static",
         "swagger_ui": True,
-        "specs_route": "/apidocs/",  # ruta principal del front swagger
+        "specs_route": "/apidocs/"
     }
 
     swagger_template = {
+        "swagger": "2.0",
         "info": {
-            "title": "API Sensores",
-            "description": "Documentación automática de la API",
-            "version": "1.0.0",
+            "title": "API de Registro de Sensores",
+            "version": "1.0.0"
         }
     }
 
-    Swagger(app, config=swagger_config, template=swagger_template)
+    Swagger(
+        app,
+        config=swagger_config,
+        template_file="./app/swagger/apispec.json"  # <-- Ruta real del archivo
+    )
 
-    # Importar Blueprints desde routes/__init__.py
+    # Blueprint imports
     from .routes import (
         unidades_bp,
         tipo_sensor_bp,
@@ -44,7 +48,6 @@ def create_app():
         mediciones_bp
     )
 
-    # Registrar Blueprints
     app.register_blueprint(unidades_bp, url_prefix="/unidades")
     app.register_blueprint(tipo_sensor_bp, url_prefix="/tipo_sensor")
     app.register_blueprint(sensores_bp, url_prefix="/sensores")
