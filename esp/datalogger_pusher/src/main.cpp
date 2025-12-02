@@ -5,13 +5,10 @@
 #include <Preferences.h>
 #include <Ticker.h>
 #include <Wire.h>
-#include <Adafruit_GFX.h>
-#include <Adafruit_SSD1306.h>
+#include <LiquidCrystal_I2C.h>
 
 // ===== DISPLAY =====
-#define SCREEN_WIDTH 128
-#define SCREEN_HEIGHT 64
-Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1);
+LiquidCrystal_I2C lcd(0x27, 16, 2);
 
 // ===== PINES =====
 #define IN1 32
@@ -63,11 +60,12 @@ void enviarWebhook() {
   Serial.printf("Sent -> %d\n", code);
 
   // Mostrar en pantalla
-  display.clearDisplay();
-  display.setCursor(0,0);
-  display.println("Ultimo envio:");
-  display.println(payload);
-  display.display();
+  lcd.clear();
+  lcd.setCursor(0,0);
+  lcd.print("Enviado:");
+  lcd.setCursor(0,1);
+  lcd.print("Code: ");
+  lcd.print(code);
 }
 
 
@@ -76,14 +74,12 @@ void setup() {
   Serial.begin(115200);
 
   // --- Pantalla ---
-  display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
-  display.clearDisplay();
-  display.setTextSize(1);
-  display.setTextColor(WHITE);
-  display.setCursor(0,0);
-  display.println("Iniciando...");
-  display.display();
-
+  lcd.init();
+  lcd.backlight();
+  lcd.clear();
+  lcd.setCursor(0,0);
+  lcd.print("Iniciando...");
+  
   // --- Pines ---
   pinMode(IN1, INPUT_PULLUP);
   pinMode(IN2, INPUT_PULLUP);
@@ -101,13 +97,13 @@ void setup() {
   wm.addParameter(&custom_webhook);
   wm.addParameter(&custom_intervalo);
 
-  display.clearDisplay();
-  display.setCursor(0,0);
-  display.println("Esperando config...");
-  display.println("SSID: ESP32-Config");
-  display.display();
+  lcd.clear();
+  lcd.setCursor(0,0);
+  lcd.print("Esperando");
+  lcd.setCursor(0,1);
+  lcd.print("Config...");
 
-  if (!wm.autoConnect("ESP32-Config")) {
+  if (!wm.autoConnect("BIT DATALOG")) {
     Serial.println("Error WiFi. Restart.");
     ESP.restart();
   }
@@ -131,13 +127,11 @@ void setup() {
   Serial.println("Webhook: " + webhookURL);
   Serial.printf("Intervalo: %d min\n", intervaloMin);
 
-  display.clearDisplay();
-  display.setCursor(0,0);
-  display.println("WiFi conectado!");
-  display.println(WiFi.localIP());
-  display.println("Webhook:");
-  display.println(webhookURL);
-  display.display();
+  lcd.clear();
+  lcd.setCursor(0,0);
+  lcd.print("WiFi OK:");
+  lcd.setCursor(0,1);
+  lcd.print(WiFi.localIP().toString().c_str());
 
   // --- Programar envío ---
   timer.attach(intervaloMin * 60, enviarWebhook);  // min → seg
