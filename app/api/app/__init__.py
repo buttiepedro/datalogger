@@ -1,4 +1,5 @@
 from flask import Flask
+from flasgger import Swagger
 from .config import Config
 from .database import db
 
@@ -9,7 +10,17 @@ def create_app():
     # Inicializar DB
     db.init_app(app)
 
-    # Importar blueprints desde routes/__init__.py
+    # Swagger UI
+    swagger_config = {
+        "headers": [],
+        "title": "API Sensores - Documentación",
+        "version": "1.0.0",
+        "uiversion": 3,
+    }
+
+    Swagger(app, config=swagger_config)
+
+    # Importar Blueprints centralizados en routes/__init__.py
     from .routes import (
         unidades_bp,
         tipo_sensor_bp,
@@ -17,7 +28,7 @@ def create_app():
         mediciones_bp
     )
 
-    # Registrar blueprints
+    # Registrar rutas
     app.register_blueprint(unidades_bp, url_prefix="/unidades")
     app.register_blueprint(tipo_sensor_bp, url_prefix="/tipo_sensor")
     app.register_blueprint(sensores_bp, url_prefix="/sensores")
