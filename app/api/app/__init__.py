@@ -37,7 +37,7 @@ def create_app():
     Swagger(
         app,
         config=swagger_config,
-        template_file="app/swagger/apispec.json"  # <-- Ruta real del archivo
+        template_file="swagger/apispec.json"
     )
 
     # Blueprint imports
