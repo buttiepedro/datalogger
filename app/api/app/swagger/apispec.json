@@ -2,80 +2,182 @@
   "swagger": "2.0",
   "info": {
     "title": "API de Registro de Sensores",
-    "description": "API REST para registrar valores enviados por sensores identificados mediante un `usuario_id`. Los datos se almacenan en una base PostgreSQL.",
+    "description": "API REST para administrar unidades, tipos de sensores, sensores y mediciones. También permite registrar valores enviados por sensores mediante `usuario_id`.",
     "version": "1.0.0"
   },
-  "basePath": "/api",
+  "basePath": "/",
   "schemes": ["http"],
   "paths": {
-    "/sensor": {
+    "/unidades": {
       "post": {
-        "tags": ["Sensores"],
-        "summary": "Registrar un nuevo valor desde un sensor",
-        "description": "Este endpoint recibe el valor enviado por un sensor identificado con `usuario_id` y lo almacena en la base de datos.",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
+        "tags": ["Unidades"],
+        "summary": "Crear una unidad",
         "parameters": [
           {
             "in": "body",
-            "name": "payload",
-            "description": "Datos enviados por el sensor",
-            "required": true,
+            "name": "body",
             "schema": {
               "type": "object",
               "properties": {
-                "usuario_id": {
-                  "type": "integer",
-                  "example": 12,
-                  "description": "Identificador único del sensor"
-                },
-                "valor": {
-                  "type": "number",
-                  "example": 23.5,
-                  "description": "Valor numérico enviado por el sensor"
-                }
+                "nombre": { "type": "string", "example": "°C" },
+                "booleana": { "type": "boolean", "example": false }
+              },
+              "required": ["nombre"]
+            }
+          }
+        ],
+        "responses": {
+          "201": { "description": "Unidad creada" }
+        }
+      }
+    },
+    "/unidades/{id}": {
+      "delete": {
+        "tags": ["Unidades"],
+        "summary": "Eliminar una unidad",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "type": "integer" }
+        ],
+        "responses": { "200": { "description": "Unidad eliminada" } }
+      }
+    },
+
+    "/tipo_sensor": {
+      "post": {
+        "tags": ["Tipo Sensor"],
+        "summary": "Crear un tipo de sensor",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "nombre": { "type": "string", "example": "Temperatura" },
+                "descripcion": { "type": "string", "example": "Sensor que mide °C" },
+                "unidad_id": { "type": "integer", "example": 1 },
+                "medicion_min": { "type": "number", "example": -50 },
+                "medicion_max": { "type": "number", "example": 100 }
+              },
+              "required": ["nombre", "unidad_id"]
+            }
+          }
+        ],
+        "responses": { "201": { "description": "Tipo sensor creado" } }
+      }
+    },
+
+    "/tipo_sensor/{id}": {
+      "delete": {
+        "tags": ["Tipo Sensor"],
+        "summary": "Eliminar un tipo de sensor",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "type": "integer" }
+        ],
+        "responses": { "200": { "description": "Eliminado" } }
+      }
+    },
+
+    "/sensores": {
+      "post": {
+        "tags": ["Sensores"],
+        "summary": "Crear un sensor",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "usuario_id": { "type": "integer", "example": 1001 },
+                "nombre": { "type": "string", "example": "Sensor Frente" },
+                "ubicacion": { "type": "string", "example": "Entrada edificio" },
+                "tipo_id": { "type": "integer", "example": 3 }
+              },
+              "required": ["usuario_id", "tipo_id"]
+            }
+          }
+        ],
+        "responses": { "201": { "description": "Sensor creado" } }
+      }
+    },
+
+    "/sensores/{usuario_id}": {
+      "delete": {
+        "tags": ["Sensores"],
+        "summary": "Eliminar un sensor por usuario_id",
+        "parameters": [
+          { "name": "usuario_id", "in": "path", "type": "integer", "required": true }
+        ],
+        "responses": { "200": { "description": "Sensor eliminado" } }
+      }
+    },
+
+    "/mediciones": {
+      "post": {
+        "tags": ["Mediciones"],
+        "summary": "Crear una medición",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "usuario_id": { "type": "integer", "example": 1001 },
+                "medicion": { "type": "number", "example": 21.3 }
+              },
+              "required": ["usuario_id", "medicion"]
+            }
+          }
+        ],
+        "responses": { "201": { "description": "Medición creada" } }
+      }
+    },
+
+    "/mediciones/{id}": {
+      "delete": {
+        "tags": ["Mediciones"],
+        "summary": "Eliminar una medición",
+        "parameters": [
+          { "name": "id", "in": "path", "type": "integer", "required": true }
+        ],
+        "responses": { "200": { "description": "Eliminado" } }
+      }
+    },
+
+    "/sensor": {
+      "post": {
+        "tags": ["Ingreso desde sensores"],
+        "summary": "Registrar un valor enviado por un sensor",
+        "description": "Este endpoint es el que utilizan los sensores físicos para enviar datos en tiempo real.",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "usuario_id": { "type": "integer", "example": 1001 },
+                "valor": { "type": "number", "example": 25.7 }
               },
               "required": ["usuario_id", "valor"]
             }
           }
         ],
         "responses": {
-          "201": {
-            "description": "Registro insertado correctamente",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "status": { "type": "string", "example": "ok" }
-              }
-            }
-          },
-          "400": {
-            "description": "Error en los datos enviados",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "error": { "type": "string", "example": "usuario_id y valor son obligatorios" }
-              }
-            }
-          },
-          "500": {
-            "description": "Error interno del servidor",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "error": { "type": "string" }
-              }
-            }
-          }
+          "201": { "description": "Valor registrado" },
+          "400": { "description": "Error de datos" }
         }
       }
     }
   },
-  "definitions": {},
+
   "tags": [
-    {
-      "name": "Sensores",
-      "description": "Operaciones relacionadas con la recepción y registro de datos de sensores"
-    }
+    { "name": "Unidades" },
+    { "name": "Tipo Sensor" },
+    { "name": "Sensores" },
+    { "name": "Mediciones" },
+    { "name": "Ingreso desde sensores" }
   ]
 }
