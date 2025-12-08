@@ -2,13 +2,22 @@
   "swagger": "2.0",
   "info": {
     "title": "API de Registro de Sensores",
-    "description": "API REST para administrar unidades, tipos de sensores, sensores y mediciones. También permite registrar valores enviados por sensores mediante `usuario_id`.",
-    "version": "1.0.0"
+    "description": "API REST para administrar unidades, tipos de sensores, sensores y mediciones. Incluye un endpoint para el envío de valores desde sensores físicos.",
+    "version": "1.1.0"
   },
   "basePath": "/",
   "schemes": ["http"],
+
   "paths": {
+
     "/unidades": {
+      "get": {
+        "tags": ["Unidades"],
+        "summary": "Obtener todas las unidades",
+        "responses": {
+          "200": { "description": "Lista de unidades" }
+        }
+      },
       "post": {
         "tags": ["Unidades"],
         "summary": "Crear una unidad",
@@ -18,20 +27,27 @@
             "name": "body",
             "schema": {
               "type": "object",
+              "required": ["nombre"],
               "properties": {
                 "nombre": { "type": "string", "example": "°C" },
                 "booleana": { "type": "boolean", "example": false }
-              },
-              "required": ["nombre"]
+              }
             }
           }
         ],
-        "responses": {
-          "201": { "description": "Unidad creada" }
-        }
+        "responses": { "201": { "description": "Unidad creada" } }
       }
     },
+
     "/unidades/{id}": {
+      "get": {
+        "tags": ["Unidades"],
+        "summary": "Obtener una unidad por ID",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "type": "integer" }
+        ],
+        "responses": { "200": { "description": "Unidad encontrada" } }
+      },
       "delete": {
         "tags": ["Unidades"],
         "summary": "Eliminar una unidad",
@@ -42,7 +58,14 @@
       }
     },
 
+
     "/tipo_sensor": {
+      "get": {
+        "tags": ["Tipo Sensor"],
+        "summary": "Obtener todos los tipos de sensor",
+        "responses": { "200": { "description": "Lista de tipos de sensor" } }
+      },
+
       "post": {
         "tags": ["Tipo Sensor"],
         "summary": "Crear un tipo de sensor",
@@ -52,14 +75,14 @@
             "name": "body",
             "schema": {
               "type": "object",
+              "required": ["nombre", "unidad_id"],
               "properties": {
                 "nombre": { "type": "string", "example": "Temperatura" },
                 "descripcion": { "type": "string", "example": "Sensor que mide °C" },
                 "unidad_id": { "type": "integer", "example": 1 },
                 "medicion_min": { "type": "number", "example": -50 },
                 "medicion_max": { "type": "number", "example": 100 }
-              },
-              "required": ["nombre", "unidad_id"]
+              }
             }
           }
         ],
@@ -68,6 +91,15 @@
     },
 
     "/tipo_sensor/{id}": {
+      "get": {
+        "tags": ["Tipo Sensor"],
+        "summary": "Obtener un tipo de sensor por ID",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "type": "integer" }
+        ],
+        "responses": { "200": { "description": "Tipo sensor encontrado" } }
+      },
+
       "delete": {
         "tags": ["Tipo Sensor"],
         "summary": "Eliminar un tipo de sensor",
@@ -78,7 +110,14 @@
       }
     },
 
+
     "/sensores": {
+      "get": {
+        "tags": ["Sensores"],
+        "summary": "Obtener todos los sensores",
+        "responses": { "200": { "description": "Lista de sensores" } }
+      },
+
       "post": {
         "tags": ["Sensores"],
         "summary": "Crear un sensor",
@@ -88,13 +127,13 @@
             "name": "body",
             "schema": {
               "type": "object",
+              "required": ["id_usuario", "tipo_id"],
               "properties": {
-                "usuario_id": { "type": "integer", "example": 1001 },
+                "id_usuario": { "type": "integer", "example": 1001 },
                 "nombre": { "type": "string", "example": "Sensor Frente" },
                 "ubicacion": { "type": "string", "example": "Entrada edificio" },
                 "tipo_id": { "type": "integer", "example": 3 }
-              },
-              "required": ["usuario_id", "tipo_id"]
+              }
             }
           }
         ],
@@ -102,18 +141,34 @@
       }
     },
 
-    "/sensores/{usuario_id}": {
+    "/sensores/{id}": {
+      "get": {
+        "tags": ["Sensores"],
+        "summary": "Obtener un sensor por ID",
+        "parameters": [
+          { "name": "id", "in": "path", "type": "integer", "required": true }
+        ],
+        "responses": { "200": { "description": "Sensor encontrado" } }
+      },
+
       "delete": {
         "tags": ["Sensores"],
-        "summary": "Eliminar un sensor por usuario_id",
+        "summary": "Eliminar un sensor",
         "parameters": [
-          { "name": "usuario_id", "in": "path", "type": "integer", "required": true }
+          { "name": "id", "in": "path", "type": "integer", "required": true }
         ],
         "responses": { "200": { "description": "Sensor eliminado" } }
       }
     },
 
+
     "/mediciones": {
+      "get": {
+        "tags": ["Mediciones"],
+        "summary": "Obtener todas las mediciones",
+        "responses": { "200": { "description": "Lista de mediciones" } }
+      },
+
       "post": {
         "tags": ["Mediciones"],
         "summary": "Crear una medición",
@@ -123,11 +178,11 @@
             "name": "body",
             "schema": {
               "type": "object",
+              "required": ["id_sensor", "medicion"],
               "properties": {
-                "usuario_id": { "type": "integer", "example": 1001 },
+                "id_sensor": { "type": "integer", "example": 10 },
                 "medicion": { "type": "number", "example": 21.3 }
-              },
-              "required": ["usuario_id", "medicion"]
+              }
             }
           }
         ],
@@ -136,6 +191,15 @@
     },
 
     "/mediciones/{id}": {
+      "get": {
+        "tags": ["Mediciones"],
+        "summary": "Obtener una medición por ID",
+        "parameters": [
+          { "name": "id", "in": "path", "type": "integer", "required": true }
+        ],
+        "responses": { "200": { "description": "Medición encontrada" } }
+      },
+
       "delete": {
         "tags": ["Mediciones"],
         "summary": "Eliminar una medición",
@@ -146,22 +210,22 @@
       }
     },
 
+
     "/sensor": {
       "post": {
         "tags": ["Ingreso desde sensores"],
-        "summary": "Registrar un valor enviado por un sensor",
-        "description": "Este endpoint es el que utilizan los sensores físicos para enviar datos en tiempo real.",
+        "summary": "Registrar un valor enviado por un sensor físico",
         "parameters": [
           {
             "in": "body",
             "name": "body",
             "schema": {
               "type": "object",
+              "required": ["id_usuario", "valor"],
               "properties": {
-                "usuario_id": { "type": "integer", "example": 1001 },
+                "id_usuario": { "type": "integer", "example": 1001 },
                 "valor": { "type": "number", "example": 25.7 }
-              },
-              "required": ["usuario_id", "valor"]
+              }
             }
           }
         ],
