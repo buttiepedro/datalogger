@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (formUnidad) {
     const listEl = document.getElementById('unidades-list');
     const load = async () => {
-      const r = await apiFetch('/unidades', { method: 'GET' });
+      const r = await apiFetch('/unidades/', { method: 'GET' });
       listEl.innerHTML = '';
       if (r.ok && Array.isArray(r.body)) {
         r.body.forEach(u => {
@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
         nombre: formUnidad.nombre.value,
         booleana: formUnidad.booleana.checked
       };
-      await apiFetch('/unidades', { method: 'POST', body: JSON.stringify(data) });
+      await apiFetch('/unidades/', { method: 'POST', body: JSON.stringify(data) });
       formUnidad.reset();
       load();
     });
@@ -84,7 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
         medicion_min: formTipo.medicion_min.value ? Number(formTipo.medicion_min.value) : undefined,
         medicion_max: formTipo.medicion_max.value ? Number(formTipo.medicion_max.value) : undefined
       };
-      await apiFetch('/tipo_sensor', { method: 'POST', body: JSON.stringify(data) });
+      await apiFetch('/tipo_sensor/', { method: 'POST', body: JSON.stringify(data) });
       formTipo.reset();
       load();
     });
@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (formSensor) {
     const listEl = document.getElementById('sensores-list');
     const load = async () => {
-      const r = await apiFetch('/sensores', { method: 'GET' });
+      const r = await apiFetch('/sensores/', { method: 'GET' });
       listEl.innerHTML = '';
       if (r.ok && Array.isArray(r.body)) {
         r.body.forEach(s => {
@@ -124,7 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ubicacion: formSensor.ubicacion.value || undefined,
         tipo_id: Number(formSensor.tipo_id.value)
       };
-      await apiFetch('/sensores', { method: 'POST', body: JSON.stringify(data) });
+      await apiFetch('/sensores/', { method: 'POST', body: JSON.stringify(data) });
       formSensor.reset();
       load();
     });
@@ -174,7 +174,7 @@ document.addEventListener('DOMContentLoaded', () => {
         usuario_id: Number(formMed.usuario_id.value),
         medicion: Number(formMed.medicion.value)
       };
-      await apiFetch('/mediciones', { method: 'POST', body: JSON.stringify(data) });
+      await apiFetch('/mediciones/', { method: 'POST', body: JSON.stringify(data) });
       formMed.reset();
       load();
     });
