@@ -5,7 +5,6 @@ from dotenv import load_dotenv
 load_dotenv()
 
 app = Flask(__name__, static_folder="static", template_folder="templates")
-app.url_map.strict_slashes = False
 API_URL = os.getenv("API_URL", "http://localhost:5000")
 
 @app.context_processor
