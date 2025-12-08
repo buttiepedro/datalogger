@@ -6,16 +6,16 @@ from flasgger import Swagger
 
 def create_app():
     app = Flask(__name__)
-    app.url_map.strict_slashes = False
     app.config.from_object(Config)
 
     db.init_app(app)
 
     # CORS (ANTES DE BLUEPRINTS)
-    CORS(
-        app,
-        resources={r"/*": {"origins": "*"}},
-        supports_credentials=False
+    CORS(app, 
+        resources={r"/*": {"origins": "https://datalog-front.6kashx.easypanel.host"}},
+        supports_credentials=True,
+        allow_headers=["Content-Type", "Authorization"],
+        methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
     )
 
     # ----- SWAGGER -----
