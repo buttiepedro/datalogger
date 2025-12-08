@@ -1,38 +1,53 @@
 from flask import Flask
 from .config import Config
 from .database import db
+from flask_cors import CORS   # <--- IMPORT CORRECTO
 from flasgger import Swagger
-from flask_cors import CORS
 
 def create_app():
     app = Flask(__name__)
     app.url_map.strict_slashes = False
     app.config.from_object(Config)
 
-    # CORS
-    CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
-
     db.init_app(app)
 
-    # Swagger config
+    # CORS (ANTES DE BLUEPRINTS)
+    CORS(
+        app,
+        resources={r"/*": {"origins": "*"}},
+        supports_credentials=False
+    )
+
+    # ----- SWAGGER -----
     swagger_config = {
         "headers": [],
-        "specs": [{
-            "endpoint": "apispec",
-            "route": "/apispec.json",
-            "rule_filter": lambda rule: True,
-            "model_filter": lambda tag: True,
-            "swagger_ui": True
-        }],
+        "specs": [
+            {
+                "endpoint": "apispec",
+                "route": "/apispec.json",
+                "rule_filter": lambda rule: True,
+                "model_filter": lambda tag: True,
+                "swagger_ui": True
+            }
+        ],
         "static_url_path": "/flasgger_static",
         "swagger_ui": True,
         "specs_route": "/apidocs/"
     }
 
-    Swagger(app, config=swagger_config, template_file="swagger/apispec.json")
+    Swagger(
+        app,
+        config=swagger_config,
+        template_file="swagger/apispec.json"
+    )
 
-    # Blueprints
-    from .routes import unidades_bp, tipo_sensor_bp, sensores_bp, mediciones_bp
+    # ----- BLUEPRINTS -----
+    from .routes import (
+        unidades_bp,
+        tipo_sensor_bp,
+        sensores_bp,
+        mediciones_bp
+    )
 
     app.register_blueprint(unidades_bp, url_prefix="/unidades")
     app.register_blueprint(tipo_sensor_bp, url_prefix="/tipo_sensor")
