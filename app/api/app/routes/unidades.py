@@ -4,7 +4,7 @@ from ..models import Unidades
 
 unidades_bp = Blueprint("unidades", __name__)
 
-@unidades_bp.get("/")
+@unidades_bp.get("")
 def get_unidades():
     unidades = Unidades.query.all()
     data = [
@@ -21,7 +21,7 @@ def get_unidad(unidad_id):
     return jsonify({"id": u.id, "nombre": u.nombre, "booleana": u.booleana}), 200
 
 
-@unidades_bp.post("/")
+@unidades_bp.post("")
 def add_unidad():
     data = request.json
     u = Unidades(nombre=data["nombre"], booleana=data["booleana"])

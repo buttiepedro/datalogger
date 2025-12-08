@@ -6,7 +6,6 @@ from flasgger import Swagger
 
 def create_app():
     app = Flask(__name__)
-    app.url_map.strict_slashes = False
     app.config.from_object(Config)
 
     db.init_app(app)
