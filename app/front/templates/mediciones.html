@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Mediciones</h2>
+
+<div class="row">
+  <div class="col-md-5">
+    <form id="form-medicion">
+      <div class="mb-3">
+        <label class="form-label">Usuario ID</label>
+        <input name="usuario_id" type="number" class="form-control" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Medición</label>
+        <input name="medicion" type="number" step="any" class="form-control" required>
+      </div>
+      <button class="btn btn-primary">Crear Medición</button>
+    </form>
+  </div>
+
+  <div class="col-md-7">
+    <h5>Listado</h5>
+    <div id="mediciones-list"></div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Sensores</h2>
+
+<div class="row">
+  <div class="col-md-5">
+    <form id="form-sensor">
+      <div class="mb-3">
+        <label class="form-label">Usuario ID</label>
+        <input name="usuario_id" type="number" class="form-control" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Nombre</label>
+        <input name="nombre" class="form-control">
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Ubicación</label>
+        <input name="ubicacion" class="form-control">
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Tipo ID</label>
+        <input name="tipo_id" type="number" class="form-control" required>
+      </div>
+      <button class="btn btn-primary">Crear Sensor</button>
+    </form>
+    <hr>
+    <h6>Simular envío desde sensor físico</h6>
+    <form id="form-sensor-ingreso">
+      <div class="mb-3">
+        <label class="form-label">Usuario ID</label>
+        <input name="usuario_id" type="number" class="form-control" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Valor</label>
+        <input name="valor" type="number" step="any" class="form-control" required>
+      </div>
+      <button class="btn btn-secondary">Enviar valor (POST /sensor)</button>
+    </form>
+  </div>
+
+  <div class="col-md-7">
+    <h5>Listado</h5>
+    <div id="sensores-list"></div>
+  </div>
+</div>
+{% endblock %}

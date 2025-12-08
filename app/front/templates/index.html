@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="text-center">
+    <h1>Frontend para Dataloggers</h1>
+    <p class="lead">Interfaz para administrar unidades, tipos de sensor, sensores y mediciones.</p>
+
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <div class="card p-3">
+          <h5>Cómo usar</h5>
+          <ol>
+            <li>Configurar <code>API_URL</code> en .env apuntando a tu backend.</li>
+            <li>Levantar con Docker / docker-compose o localmente.</li>
+            <li>Ir a las secciones del menú para ver/crear/eliminar entidades.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

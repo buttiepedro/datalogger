@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Unidades</h2>
+
+<div class="row">
+  <div class="col-md-5">
+    <form id="form-unidad">
+      <div class="mb-3">
+        <label class="form-label">Nombre (ej. °C)</label>
+        <input name="nombre" class="form-control" required>
+      </div>
+      <div class="form-check mb-3">
+        <input class="form-check-input" type="checkbox" id="booleana" name="booleana">
+        <label class="form-check-label" for="booleana">Booleana</label>
+      </div>
+      <button class="btn btn-primary">Crear Unidad</button>
+    </form>
+  </div>
+
+  <div class="col-md-7">
+    <h5>Listado</h5>
+    <div id="unidades-list"></div>
+  </div>
+</div>
+{% endblock %}

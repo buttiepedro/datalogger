@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Tipo de Sensor</h2>
+
+<div class="row">
+  <div class="col-md-5">
+    <form id="form-tipo-sensor">
+      <div class="mb-3">
+        <label class="form-label">Nombre</label>
+        <input name="nombre" class="form-control" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Descripción</label>
+        <input name="descripcion" class="form-control">
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Unidad ID</label>
+        <input name="unidad_id" type="number" class="form-control" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Medición min</label>
+        <input name="medicion_min" type="number" step="any" class="form-control">
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Medición max</label>
+        <input name="medicion_max" type="number" step="any" class="form-control">
+      </div>
+      <button class="btn btn-primary">Crear Tipo</button>
+    </form>
+  </div>
+
+  <div class="col-md-7">
+    <h5>Listado</h5>
+    <div id="tipo-sensor-list"></div>
+  </div>
+</div>
+{% endblock %}
