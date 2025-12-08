@@ -4,7 +4,7 @@ from ..models import Mediciones
 
 mediciones_bp = Blueprint("mediciones", __name__)
 
-@mediciones_bp.get("/")
+@mediciones_bp.get("")
 def get_mediciones():
     mediciones = Mediciones.query.all()
     data = [
@@ -33,7 +33,7 @@ def get_medicion(medicion_id):
     }), 200
 
 
-@mediciones_bp.post("/")
+@mediciones_bp.post("")
 def add_medicion():
     data = request.json
     m = Mediciones(id_sensor=data["id_sensor"], medicion=data["medicion"])

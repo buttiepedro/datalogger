@@ -4,7 +4,7 @@ from ..models import TipoSensor
 
 tipo_sensor_bp = Blueprint("tipo_sensor", __name__)
 
-@tipo_sensor_bp.get("/")
+@tipo_sensor_bp.get("")
 def get_tipos():
     tipos = TipoSensor.query.all()
     data = [
@@ -37,7 +37,7 @@ def get_tipo(tipo_id):
     }), 200
 
 
-@tipo_sensor_bp.post("/")
+@tipo_sensor_bp.post("")
 def add_tipo():
     data = request.json
     ts = TipoSensor(

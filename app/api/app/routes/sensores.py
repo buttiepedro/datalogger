@@ -4,7 +4,7 @@ from ..models import Sensores
 
 sensores_bp = Blueprint("sensores", __name__)
 
-@sensores_bp.get("/")
+@sensores_bp.get("")
 def get_sensores():
     sensores = Sensores.query.all()
     data = [
@@ -35,7 +35,7 @@ def get_sensor(sensor_id):
     }), 200
 
 
-@sensores_bp.post("/")
+@sensores_bp.post("")
 def add_sensor():
     data = request.json
     s = Sensores(
