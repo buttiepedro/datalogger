@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (formTipo) {
     const listEl = document.getElementById('tipo-sensor-list');
     const load = async () => {
-      const r = await apiFetch('/tipo_sensor', { method: 'GET' });
+      const r = await apiFetch('/tipo_sensor/', { method: 'GET' });
       listEl.innerHTML = '';
       if (r.ok && Array.isArray(r.body)) {
         r.body.forEach(t => {
@@ -136,7 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
           usuario_id: Number(formSensorIngreso.usuario_id.value),
           valor: Number(formSensorIngreso.valor.value)
         };
-        const r = await apiFetch('/sensor', { method: 'POST', body: JSON.stringify(data) });
+        const r = await apiFetch('/sensor/', { method: 'POST', body: JSON.stringify(data) });
         alert(r.ok ? 'Valor enviado correctamente' : `Error: ${r.status}`);
         formSensorIngreso.reset();
       });
@@ -148,7 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (formMed) {
     const listEl = document.getElementById('mediciones-list');
     const load = async () => {
-      const r = await apiFetch('/mediciones', { method: 'GET' });
+      const r = await apiFetch('/mediciones/', { method: 'GET' });
       listEl.innerHTML = '';
       if (r.ok && Array.isArray(r.body)) {
         r.body.forEach(m => {
