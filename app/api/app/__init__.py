@@ -1,7 +1,7 @@
 from flask import Flask
 from .config import Config
 from .database import db
-from flask_cors import CORS   # <--- IMPORT CORRECTO
+from flask_cors import CORS
 from flasgger import Swagger
 
 def create_app():
@@ -10,9 +10,19 @@ def create_app():
 
     db.init_app(app)
 
-    # CORS (ANTES DE BLUEPRINTS)
-    CORS(app, 
-        resources={r"/*": {"origins": "https://datalog-front.6kashx.easypanel.host"}},
+    from .routes.unidades import Unidades
+    from .routes.tipo_sensor import TipoSensor
+    from .routes.sensores import Sensores
+    from .routes.mediciones import Mediciones
+
+    # ⬇️ CREAR TABLAS
+    with app.app_context():
+        db.create_all()
+
+    # ----- CORS -----
+    CORS(
+        app,
+        resources={r"/*": {"origins": "*"}},
         supports_credentials=True,
         allow_headers=["Content-Type", "Authorization"],
         methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
