@@ -1,0 +1,52 @@
+version: "3.9"
+
+services:
+
+  # ======================
+  # PostgreSQL
+  # ======================
+  datalog_postgres:
+    image: postgres:15
+    container_name: datalog_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: datalog
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 0655084017a371192df3
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  # ======================
+  # API (Backend)
+  # ======================
+  api:
+    build:
+      context: ./api
+    container_name: datalog_api
+    restart: unless-stopped
+    env_file:
+      - ./api/.env
+    depends_on:
+      - datalog_postgres
+    ports:
+      - "5000:5000"
+
+  # ======================
+  # Frontend
+  # ======================
+  front:
+    build:
+      context: ./front
+    container_name: datalog_front
+    restart: unless-stopped
+    env_file:
+      - ./front/.env
+    depends_on:
+      - api
+    ports:
+      - "8000:8000"
+
+volumes:
+  pgdata:
