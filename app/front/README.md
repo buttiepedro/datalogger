@@ -1,21 +1,16 @@
-# Flask Frontend para Dataloggers
+# React + Vite
 
-## Requisitos
-- Docker & docker-compose (opcional)
-- O Python 3.11 con pip si querés correr localmente
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-## Configuración
-1. Copiar `.env.example` a `.env` y ajustar `API_URL` (ej: http://mi-backend:5000).
-2. Build & run con Docker:
-   - `docker build -t datalogger-frontend .`
-   - `docker run --env-file .env -p 8000:8000 datalogger-frontend`
-   O con docker-compose:
-   - `docker-compose up --build`
+Currently, two official plugins are available:
 
-## Correr local (sin docker)
-```bash
-python -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-export API_URL=http://localhost:5000
-python app.py
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+
+## React Compiler
+
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+
+## Expanding the ESLint configuration
+
+If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
