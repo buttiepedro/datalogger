@@ -8,17 +8,7 @@ export default function Dashboard() {
   const [error, setError] = useState(null)
   const [empresas, setEmpresas] = useState([])
 
-  useEffect(() => {
-    api.get("/usuarios/")
-      .then((res) => {
-        setUsuarios(res.data)
-      })
-      .catch((err) => {
-        setError(err)
-      })  
-      .finally(() => {
-        setLoading(false)
-      })
+  const getEmpresas = () => {
     api.get("/empresas/")
       .then((res) => {
         setEmpresas(res.data)
@@ -29,6 +19,22 @@ export default function Dashboard() {
       .finally(() => {
         setLoading(false)
       })
+  }
+  const getUsuarios = () => {
+    api.get("/usuarios/")
+      .then((res) => {
+        setUsuarios(res.data)
+      })
+      .catch((err) => {
+        setError(err)
+      })  
+      .finally(() => {
+        setLoading(false)
+      })
+  }
+  useEffect(() => {
+    getUsuarios()
+    getEmpresas()
   }, [usuarios.length, empresas.length])
 
   const crearUsuario = (e) => {
