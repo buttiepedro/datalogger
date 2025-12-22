@@ -1,10 +1,12 @@
 from flask import Blueprint, request, jsonify
 from ..database import db
 from ..models import TipoSensor
+from ..docorators import superuser_required
 
 tipo_sensor_bp = Blueprint("tipo_sensor", __name__)
 
 @tipo_sensor_bp.get("/")
+@superuser_required
 def get_tipos():
     tipos = TipoSensor.query.all()
     data = [
@@ -22,6 +24,7 @@ def get_tipos():
 
 
 @tipo_sensor_bp.get("/<int:tipo_id>")
+@superuser_required
 def get_tipo(tipo_id):
     t = TipoSensor.query.get(tipo_id)
     if not t:
@@ -38,6 +41,7 @@ def get_tipo(tipo_id):
 
 
 @tipo_sensor_bp.post("/")
+@superuser_required
 def add_tipo():
     data = request.json
     ts = TipoSensor(
@@ -52,6 +56,7 @@ def add_tipo():
     return jsonify({"msg": "TipoSensor creado", "id": ts.id})
 
 @tipo_sensor_bp.delete("/<int:tipo_id>")
+@superuser_required
 def delete_tipo(tipo_id):
     ts = TipoSensor.query.get(tipo_id)
     if not ts:

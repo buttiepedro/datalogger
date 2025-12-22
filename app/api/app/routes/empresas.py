@@ -1,12 +1,33 @@
 from flask import Blueprint, request, jsonify
 from ..database import db
 from ..models import Empresas
+from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
+from ..docorators import admin_required, superuser_required
 
 empresas_bp = Blueprint("empresas", __name__)
 
+
+# Esta línea protege TODAS las rutas que pertenezcan a este blueprint
+@empresas_bp.before_request
+@jwt_required()
+def check_jwt():
+  pass
+
 @empresas_bp.get("/")
+@admin_required
 def get_empresas():
-    empresas = Empresas.query.all()
+    if not get_jwt().get("is_superuser"):
+        empresas = Empresas.query.all()
+        data = [
+            {
+                "id": e.id,
+                "nombre": e.nombre,
+                "direccion": e.direccion,
+            }
+            for e in empresas
+        ]
+        return jsonify(data), 200
+    empresas = Empresas.query.filter_by(id=get_jwt().get("id_empresa")).all()
     data = [
         {
             "id": e.id,
@@ -18,6 +39,7 @@ def get_empresas():
     return jsonify(data), 200
 
 @empresas_bp.post("/")
+@superuser_required
 def add_empresa():
     data = request.json
     e = Empresas(
@@ -29,6 +51,7 @@ def add_empresa():
     return jsonify({"msg": "Empresa creada", "id": e.id})
 
 @empresas_bp.delete("/<int:empresa_id>")
+@superuser_required
 def delete_empresa(empresa_id):
   e = Empresas.query.get(empresa_id)
   if not e:

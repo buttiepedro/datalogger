@@ -1,5 +1,5 @@
 import datetime
-from .database import db
+from app.database import db
 from werkzeug.security import generate_password_hash, check_password_hash
 
 class Empresas(db.Model):
@@ -15,6 +15,7 @@ class Usuarios(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(255), nullable=False)
     is_admin = db.Column(db.Boolean)
+    is_superuser = db.Column(db.Boolean, default=False)
     id_empresa = db.Column(db.Integer, db.ForeignKey("empresas.id"))
     
     empresa = db.relationship("Empresas")
@@ -32,6 +33,7 @@ class Usuarios(db.Model):
             "email": self.email,
             "is_admin": self.is_admin,
             "empresa": self.empresa.nombre if self.empresa else None,
+            "is_superuser": self.is_superuser,
         }
 
 
@@ -57,13 +59,13 @@ class TipoSensor(db.Model):
 class Sensores(db.Model):
     __tablename__ = "sensores"
     id = db.Column(db.Integer, primary_key=True)
-    id_usuario = db.Column(db.Integer, db.ForeignKey("usuarios.id"))  # referencia externa
+    id_empresa = db.Column(db.Integer, db.ForeignKey("empresas.id"))
     nombre = db.Column(db.String)
     ubicacion = db.Column(db.Text)
     id_tipo = db.Column(db.Integer, db.ForeignKey("tipo_sensor.id"))
 
     tipo = db.relationship("TipoSensor")
-    usuario = db.relationship("Usuarios")
+    empresa = db.relationship("Empresas")
 
 
 class Mediciones(db.Model):
