@@ -1,16 +1,15 @@
-import { NavLink, useNavigate } from "react-router-dom"
+import { NavLink, useNavigate, useLocation } from "react-router-dom"
 import BugerBtn from "./BugerBtn"
 import { useAuth } from "../context/AuthContext"
-
-const linkClass = ({ isActive }) =>
-  isActive
-    ? "block p-2 rounded bg-blue-600 text-white"
-    : "block p-2 rounded hover:bg-blue-100"
 
 export default function Header() {
   const navigate = useNavigate()
   const { logout, user, loading } = useAuth()
+  const location = useLocation()
+  const tabActivo = "block p-2 border-b-2 border-white text-white rounded-t-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white"
+  const tanInactivo = "rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white"
   if (loading) return null;
+  
   const cerrarSesion = () => {
     logout()
     navigate("/login")
@@ -30,19 +29,22 @@ export default function Header() {
         </div>
         <div class="hidden sm:ml-6 sm:block">
           <div class="flex space-x-4">
+            <span className={location.pathname === "/dashboard" ? tabActivo : tanInactivo}>
+              <NavLink to="/dashboard" aria-current="page">Dashboard</NavLink>
+            </span>
             {user.isSuperuser ?
-            <span className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white">
+            <span className={location.pathname === "/tipos-de-sensores" ? tabActivo : tanInactivo}>
               <NavLink to="/tipos-de-sensores" aria-current="page">Tipos de Sensores</NavLink>
             </span>
             : <></>}
-            <span className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white">
+            <span className={location.pathname === "/mediciones" ? tabActivo : tanInactivo}>
               <NavLink to="/mediciones">Mediciones</NavLink>
             </span>
-            <span className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white">
+            <span className={location.pathname === "/sensores" ? tabActivo : tanInactivo}>
               <NavLink to="/sensores">Sensores</NavLink>
             </span>
             {user.isSuperuser ?
-              <span className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white">
+              <span className={location.pathname === "/unidades" ? tabActivo : tanInactivo}>
                 <NavLink to="/unidades" >Unidades</NavLink>
               </span>
             : <></>}
