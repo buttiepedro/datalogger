@@ -9,7 +9,7 @@ const api = axios.create({
 })
 
 api.interceptors.request.use((config) => {
-  let token = localStorage.getItem("token");
+  let token = localStorage.getItem("token") || sessionStorage.getItem("token");
   if (token) {
     // Esto elimina cualquier comilla extra que se haya guardado
     token = token.replace(/^"(.*)"$/, '$1'); 

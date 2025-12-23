@@ -16,7 +16,8 @@ def check_jwt():
 @empresas_bp.get("/")
 @admin_required
 def get_empresas():
-    if not get_jwt().get("is_superuser"):
+    claims = get_jwt()
+    if claims.get("is_superuser"):
         empresas = Empresas.query.all()
         data = [
             {
@@ -27,16 +28,17 @@ def get_empresas():
             for e in empresas
         ]
         return jsonify(data), 200
-    empresas = Empresas.query.filter_by(id=get_jwt().get("id_empresa")).all()
-    data = [
-        {
-            "id": e.id,
-            "nombre": e.nombre,
-            "direccion": e.direccion,
-        }
-        for e in empresas
-    ]
-    return jsonify(data), 200
+    else:
+        empresas = Empresas.query.filter_by(id=claims.get("id_empresa")).all()
+        data = [
+            {
+                "id": e.id,
+                "nombre": e.nombre,
+                "direccion": e.direccion,
+            }
+            for e in empresas
+        ]
+        return jsonify(data), 200
 
 @empresas_bp.post("/")
 @superuser_required

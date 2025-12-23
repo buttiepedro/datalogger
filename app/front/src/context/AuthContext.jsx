@@ -1,38 +1,57 @@
-import { createContext, useContext, useState } from "react"
+import { createContext, useState, useEffect, useContext } from "react";
+import { jwtDecode } from "jwt-decode";
 
-const AuthContext = createContext()
+export const AuthContext = createContext();
 
-export function AuthProvider({ children }) {
-  const [token, setToken] = useState(
-    localStorage.getItem("token") || sessionStorage.getItem("token")
-  )
-  
-  const loginPermanente = (newToken) => {
-    localStorage.setItem("token", newToken)
-    setToken(newToken)
-  }
+// Exportar useAuth para solucionar el error de Login.jsx
+export const useAuth = () => useContext(AuthContext);
 
-  const login = (newToken, rememberMe) => {
-    if (rememberMe) {
-      loginPermanente(newToken)
-    } else {
-      sessionStorage.setItem("token", newToken)
-      setToken(newToken)
-    }
-  }
+export const AuthProvider = ({ children }) => {
+    const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
 
-  const logout = () => {
-    localStorage.removeItem("token")
-    sessionStorage.removeItem("token")
-    setToken(null)
+    // Función para procesar el token y setear el usuario
+    const saveUserFromToken = (token) => {
+      try {
+        const decoded = jwtDecode(token);
+        setUser({
+          id: decoded.sub,
+          isAdmin: decoded.is_admin,
+          isSuperuser: decoded.is_superuser,
+          idEmpresa: decoded.id_empresa
+        });
+      } catch (error) {
+        console.error("Error decodificando token", error);
+        logout();
+      }
+    };
 
-  }
+    // PERSISTENCIA: Ejecutar al cargar la web
+    useEffect(() => {
+      const token = localStorage.getItem("token") || sessionStorage.getItem("token");
+      if (token) {
+        saveUserFromToken(token);
+      }
+      setLoading(false);
+    }, []);
 
-  return (
-    <AuthContext.Provider value={{ token, login, logout }}>
-      {children}
-    </AuthContext.Provider>
-  )
-}
+    const login = (token, rememberMe) => {
+      if (rememberMe)
+        localStorage.setItem("token", token);
+      else
+        sessionStorage.setItem("token", token);
+      saveUserFromToken(token);
+    };
 
-export const useAuth = () => useContext(AuthContext)
+    const logout = () => {
+        localStorage.removeItem("token");
+        sessionStorage.removeItem("token");
+        setUser(null);
+    };
+
+    return (
+        <AuthContext.Provider value={{ user, login, logout, loading }}>
+            {children}
+        </AuthContext.Provider>
+    );
+};

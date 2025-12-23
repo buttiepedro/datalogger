@@ -15,22 +15,31 @@ def check_jwt():
 @usuarios_bp.get("/")
 @admin_required
 def get_usuarios():
-  usuario_logeado_id = get_jwt_identity()
   claims = get_jwt()
-  id_empresa = claims.get("id_empresa")
-  usuarios = Usuarios.query.filter(Usuarios.id_empresa == id_empresa, Usuarios.id != usuario_logeado_id).all()
+  usuario_logeado_id = get_jwt_identity()
+  if claims.get("is_superuser"):
+    usuarios = Usuarios.query.filter( Usuarios.id != usuario_logeado_id).all()
+    return jsonify([u.to_dict() for u in usuarios])
+  empresa = claims.get("id_empresa")
+  usuarios = Usuarios.query.filter(Usuarios.id_empresa == empresa, Usuarios.id != usuario_logeado_id).all()
   return jsonify([u.to_dict() for u in usuarios])
 
 @usuarios_bp.post("/")
 @admin_required
 def create_usuario():
   data = request.json
+  claims = get_jwt()
+
+  if claims.get("is_superuser") == True:
+    empresa_id = data["id_empresa"]
+  else:
+    empresa_id = claims.get("id_empresa")
   u = Usuarios(
     nombre=data["nombre"],
     email=data["email"],
     is_admin=data.get("is_admin", False),
-    id_empresa=data["id_empresa"],
-    is_superuser=data.get("is_superuser", True)
+    id_empresa=empresa_id,
+    is_superuser=data.get("is_superuser", False)
   )
   u.set_password(data["password"])
   db.session.add(u)
