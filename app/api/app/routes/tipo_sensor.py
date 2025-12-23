@@ -2,8 +2,13 @@ from flask import Blueprint, request, jsonify
 from ..database import db
 from ..models import TipoSensor
 from ..docorators import superuser_required
+from flask_jwt_extended import jwt_required
 
 tipo_sensor_bp = Blueprint("tipo_sensor", __name__)
+@tipo_sensor_bp.before_request
+@jwt_required()
+def check_jwt():
+  pass
 
 @tipo_sensor_bp.get("/")
 @superuser_required

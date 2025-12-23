@@ -1,16 +1,24 @@
 from flask import Blueprint, request, jsonify
 from ..database import db
 from ..models import Sensores
+from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
+from ..docorators import admin_required
 
 sensores_bp = Blueprint("sensores", __name__)
+@sensores_bp.before_request
+@jwt_required()
+def check_jwt():
+  pass
 
 @sensores_bp.get("/")
 def get_sensores():
-    sensores = Sensores.query.all()
+    claims = get_jwt()
+    empresa=claims["id_empresa"]
+    sensores = Sensores.query.filter_by(id_empresa=empresa).all()
     data = [
         {
             "id": s.id,
-            "id_usuario": s.id_usuario,
+            "id_empresa": s.id_empresa,
             "nombre": s.nombre,
             "ubicacion": s.ubicacion,
             "tipo_id": s.tipo_id
@@ -20,26 +28,27 @@ def get_sensores():
     return jsonify(data), 200
 
 
-@sensores_bp.get("/<int:sensor_id>")
-def get_sensor(sensor_id):
-    s = Sensores.query.get(sensor_id)
-    if not s:
-        return jsonify({"error": "No existe"}), 404
+# @sensores_bp.get("/<int:sensor_id>")
+# @jwt_required()
+# def get_sensor(sensor_id):
+#     s = Sensores.query.get(sensor_id)
+#     if not s:
+#         return jsonify({"error": "No existe"}), 404
 
-    return jsonify({
-        "id": s.id,
-        "id_usuario": s.id_usuario,
-        "nombre": s.nombre,
-        "ubicacion": s.ubicacion,
-        "tipo_id": s.tipo_id
-    }), 200
-
+#     return jsonify({
+#         "id": s.id,
+#         "id_empresa": s.id_empresa,
+#         "nombre": s.nombre,
+#         "ubicacion": s.ubicacion,
+#         "tipo_id": s.tipo_id
+#     }), 200
 
 @sensores_bp.post("/")
+@admin_required
 def add_sensor():
     data = request.json
     s = Sensores(
-        id_usuario=data["id_usuario"],
+        id_empresa=data["id_empresa"],
         nombre=data["nombre"],
         ubicacion=data["ubicacion"],
         tipo_id=data["tipo_id"]
@@ -50,6 +59,7 @@ def add_sensor():
 
 
 @sensores_bp.delete("/<int:sensor_id>")
+@admin_required
 def delete_sensor(sensor_id):
     s = Sensores.query.get(sensor_id)
     if not s:

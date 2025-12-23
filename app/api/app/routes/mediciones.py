@@ -1,8 +1,14 @@
 from flask import Blueprint, request, jsonify
 from ..database import db
 from ..models import Mediciones
+from flask_jwt_extended import jwt_required
+from ..docorators import admin_required
 
 mediciones_bp = Blueprint("mediciones", __name__)
+@mediciones_bp.before_request
+@jwt_required()
+def check_jwt():
+  pass
 
 @mediciones_bp.get("/")
 def get_mediciones():
@@ -34,6 +40,7 @@ def get_medicion(medicion_id):
 
 
 @mediciones_bp.post("/")
+@admin_required
 def add_medicion():
     data = request.json
     m = Mediciones(id_sensor=data["id_sensor"], medicion=data["medicion"])
@@ -43,6 +50,7 @@ def add_medicion():
 
 
 @mediciones_bp.delete("/<int:medicion_id>")
+@admin_required
 def delete_medicion(medicion_id):
     m = Mediciones.query.get(medicion_id)
     if not m:

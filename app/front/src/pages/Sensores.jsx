@@ -7,7 +7,7 @@ export default function Sensores() {
   const [error, setError] = useState(null)
 
   useEffect(() => {
-    api.get("/sensores")
+    api.get("/sensores/")
       .then(res => {
         setSensores(res.data)
       })
