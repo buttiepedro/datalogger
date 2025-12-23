@@ -9,7 +9,8 @@ const linkClass = ({ isActive }) =>
 
 export default function Header() {
   const navigate = useNavigate()
-  const { logout } = useAuth()
+  const { logout, user, loading } = useAuth()
+  if (loading) return null;
   const cerrarSesion = () => {
     logout()
     navigate("/login")
@@ -29,18 +30,22 @@ export default function Header() {
         </div>
         <div class="hidden sm:ml-6 sm:block">
           <div class="flex space-x-4">
+            {user.isSuperuser ?
             <span className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white">
               <NavLink to="/tipos-de-sensores" aria-current="page">Tipos de Sensores</NavLink>
             </span>
+            : <></>}
             <span className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white">
               <NavLink to="/mediciones">Mediciones</NavLink>
             </span>
             <span className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white">
               <NavLink to="/sensores">Sensores</NavLink>
             </span>
-            <span className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white">
-              <NavLink to="/unidades" >Unidades</NavLink>
-            </span>
+            {user.isSuperuser ?
+              <span className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white">
+                <NavLink to="/unidades" >Unidades</NavLink>
+              </span>
+            : <></>}
           </div>
         </div>
       </div>
@@ -53,12 +58,6 @@ export default function Header() {
           </button>
 
           <el-menu anchor="bottom end" popover className="w-48 origin-top-right rounded-md bg-gray-800 py-1 outline -outline-offset-1 outline-white/10 transition transition-discrete [--anchor-gap:--spacing(2)] data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in">
-            <span className="block px-4 py-2 text-sm text-gray-300 hover:bg-white/5 cursor-pointer">
-              <NavLink to="/tipos-de-sensores">Unidades</NavLink>
-            </span>
-            <span className="block px-4 py-2 text-sm text-gray-300 hover:bg-white/5 cursor-pointer">
-              <NavLink to="/mediciones" class="block px-4 py-2 text-sm text-gray-300 hover:bg-white/5 cursor-pointer">Tipos de Sensor</NavLink>
-            </span>
             <p onClick={cerrarSesion} class="block px-4 py-2 text-sm text-gray-300 hover:bg-white/5 cursor-pointer">Cerrar sesion</p>
           </el-menu>
         </el-dropdown>
