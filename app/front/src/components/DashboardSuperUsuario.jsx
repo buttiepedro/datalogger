@@ -118,12 +118,12 @@ useEffect(() => {
           <h1 className="text-3xl font-bold tracking-tight text-sky-950">Dashboard</h1>
         </div>
       </div>
-      <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-        <div>
+      <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 ">
+        <div className="overflow-auto">
           <h2>Lista de Usuarios</h2>
           <TableUsuarios onEliminar={eliminarUsuario} usuarios={usuarios} loading={loading} error={error} />
         </div>
-        <div>
+        <div className="overflow-auto">
           <h2>Lista de Empresas</h2>
           <TableEmpresas onEliminar={eliminarEmpresa} empresas={empresas} loading={loading} error={error} />
         </div>

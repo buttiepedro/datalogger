@@ -67,7 +67,7 @@ export default function Dashboard() {
         </div>
       </div>
       <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-        <div>
+        <div className="overflow-auto">
           <h2>Lista de Usuarios</h2>
           <TablaUsuarios usuarios={usuarios} loading={loading} error={error} onEliminar={eliminarUsuario}/>
         </div>
