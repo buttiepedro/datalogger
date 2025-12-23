@@ -18,7 +18,7 @@ export default function Unidades() {
       .finally(() => {
         setLoading(false)
       })
-  }, [])
+  }, [unidades.length])
 
   const crearUnidad = (e) => {
     e.preventDefault()
@@ -78,7 +78,7 @@ export default function Unidades() {
             key={unidad.id}
             className="p-4  rounded shadow"
           >
-            <p className="font-semibold">{unidad.nombre} {unidad.booleana ? "(Booleana)" : ""}</p>
+            <p className="font-semibold">Unidad: {unidad.nombre} {unidad.booleana ? "(Booleana)" : ""}</p>
             <button
               className="mt-2 px-4 py-1 bg-red-600 text-white rounded-md"
               onClick={() => eliminarUnidad(unidad.id)} 

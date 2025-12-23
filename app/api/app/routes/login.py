@@ -23,10 +23,11 @@ def login():
 
     # Crear JWT
     token = create_access_token(
-        identity=user.id,
+        identity=str(user.id),
         additional_claims={
             "is_admin": user.is_admin,
-            "empresa_id": user.id_empresa
+            "id_empresa": user.id_empresa,
+            "is_superuser": user.is_superuser,
         },
         expires_delta=timedelta(hours=8)
     )

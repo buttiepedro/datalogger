@@ -1,10 +1,20 @@
 from flask import Blueprint, request, jsonify
 from ..database import db
 from ..models import Unidades
+from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
+from ..docorators import superuser_required
 
 unidades_bp = Blueprint("unidades", __name__)
 
+
+# Esta línea protege TODAS las rutas que pertenezcan a este blueprint
+@unidades_bp.before_request
+@jwt_required()
+def check_jwt():
+  pass
+
 @unidades_bp.get("/")
+@superuser_required
 def get_unidades():
     unidades = Unidades.query.all()
     data = [
@@ -14,6 +24,7 @@ def get_unidades():
     return jsonify(data), 200
 
 @unidades_bp.get("/<int:unidad_id>")
+@superuser_required
 def get_unidad(unidad_id):
     u = Unidades.query.get(unidad_id)
     if not u:
@@ -22,6 +33,7 @@ def get_unidad(unidad_id):
 
 
 @unidades_bp.post("/")
+@superuser_required
 def add_unidad():
     data = request.json
     u = Unidades(nombre=data["nombre"], booleana=data["booleana"])
@@ -30,6 +42,7 @@ def add_unidad():
     return jsonify({"msg": "Unidad creada", "id": u.id})
 
 @unidades_bp.delete("/<int:unidad_id>")
+@superuser_required
 def delete_unidad(unidad_id):
     u = Unidades.query.get(unidad_id)
     if not u:

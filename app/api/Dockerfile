@@ -11,4 +11,4 @@ ENV PYTHONUNBUFFERED=1
 
 EXPOSE 5000
 
-CMD ["python", "run.py"]
+CMD ["sh", "-c", "python init_admin.py && python run.py"]

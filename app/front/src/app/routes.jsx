@@ -15,13 +15,22 @@ export default function AppRoutes() {
     <Routes>
       <Route path="*" element={<Error404 />} />
       <Route path="/login" element={<Login />} />
-      {/* Rutas protegidas */}
-      <Route element={<ProtectedRoute />}>
-        <Route element={<MainLayout />}>
-          <Route path="/" element={<Dashboard />} />
+
+      <Route element={<MainLayout />}>
+        {/* Rutas para CUALQUIER usuario logeado */}
+        <Route element={<ProtectedRoute />}>
           <Route path="/sensores" element={<Sensores />} />
-          <Route path="/unidades" element={<Unidades />} />
           <Route path="/mediciones" element={<Mediciones />} />
+        </Route>
+
+        {/* Rutas solo para ADMINS de empresa o Superusers */}
+        <Route element={<ProtectedRoute requiredRole="admin" />}>
+          <Route path="/dashboard" element={<Dashboard />} />
+        </Route>
+
+        {/* Rutas exclusivas del SUPERUSER (Crear empresas) */}
+        <Route element={<ProtectedRoute requiredRole="superuser" />}>
+          <Route path="/unidades" element={<Unidades />} />
           <Route path="/tipos-de-sensores" element={<TipoSensores />}/>
         </Route>
       </Route>

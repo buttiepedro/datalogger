@@ -2,6 +2,7 @@ import { useState } from "react"
 import api from "../services/api"
 import Spiner from "../components/Spiner"
 import { useAuth } from "../context/AuthContext"
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
   const { login } = useAuth()
@@ -9,7 +10,7 @@ export default function Login() {
   const [password, setPassword] = useState("")
   const [loading, setLoading] = useState(false)
   const [rememberMe, setRememberMe] = useState(false)
-
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -23,7 +24,7 @@ export default function Login() {
         // carga 3 segundos el spinner
         setLoading(true)
         setTimeout(() => {
-          window.location.href = "/"
+          navigate("/dashboard");
         }, 3000)
       })
       .catch(err => {

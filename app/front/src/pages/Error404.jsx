@@ -1,4 +1,6 @@
+import { NavLink } from "react-router-dom"
 export default function Error404() {
+
   return (
     <>
       <main className="grid min-h-screen place-items-center bg-gray-900 px-6 py-24 sm:py-32 lg:px-8">
@@ -11,12 +13,12 @@ export default function Error404() {
             Lo siento , no pudimos encontrar la página que estás buscando.
           </p>
           <div className="mt-10 flex items-center justify-center gap-x-6">
-            <a
-              href="/"
+            <NavLink
+              to="/dashboard"
               className="rounded-md bg-indigo-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
             >
               Volver al inicio
-            </a>
+            </NavLink>
           </div>
         </div>
       </main>
