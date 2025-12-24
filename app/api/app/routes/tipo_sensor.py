@@ -11,21 +11,12 @@ def check_jwt():
   pass
 
 @tipo_sensor_bp.get("/")
-@superuser_required
 def get_tipos():
     tipos = TipoSensor.query.all()
-    data = [
-        {
-            "id": t.id,
-            "nombre": t.nombre,
-            "descripcion": t.descripcion,
-            "unidad_id": t.unidad_id,
-            "medicion_min": t.medicion_min,
-            "medicion_max": t.medicion_max
-        }
-        for t in tipos
-    ]
-    return jsonify(data), 200
+    if tipos is []:
+      return jsonify({"error": "No existen tipos de sensor"}), 404
+    return jsonify([t.to_dict() for t in tipos]), 200
+
 
 
 @tipo_sensor_bp.get("/<int:tipo_id>")
@@ -39,7 +30,7 @@ def get_tipo(tipo_id):
         "id": t.id,
         "nombre": t.nombre,
         "descripcion": t.descripcion,
-        "unidad_id": t.unidad_id,
+        "id_unidad": t.id_unidad,
         "medicion_min": t.medicion_min,
         "medicion_max": t.medicion_max
     }), 200
@@ -52,7 +43,7 @@ def add_tipo():
     ts = TipoSensor(
         nombre=data["nombre"],
         descripcion=data["descripcion"],
-        unidad_id=data["unidad_id"],
+        id_unidad=data["id_unidad"],
         medicion_min=data["medicion_min"],
         medicion_max=data["medicion_max"]
     )

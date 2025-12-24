@@ -39,7 +39,7 @@ export default function TipoSensores() {
     const nuevoTipoSensor = {
       nombre: form.nombre.value,
       descripcion: form.descripcion.value,
-      unidad_id: form.unidad_id.value,
+      id_unidad: form.unidad_id.value,
       medicion_min: form.medicion_min.value,
       medicion_max: form.medicion_max.value
     }

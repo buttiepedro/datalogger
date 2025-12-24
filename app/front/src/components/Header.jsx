@@ -47,8 +47,8 @@ export default function Header() {
             <span className={location.pathname === "/mediciones" ? tabActivo : tanInactivo}>
               <NavLink to="/mediciones">Mediciones</NavLink>
             </span>
-            <span className={location.pathname === "/sensores" ? tabActivo : tanInactivo}>
-              <NavLink to="/sensores">Sensores</NavLink>
+            <span className={location.pathname === "/dataloggers" ? tabActivo : tanInactivo}>
+              <NavLink to="/dataloggers">Dataloggers</NavLink>
             </span>
             {user.isSuperuser ?
               <span className={location.pathname === "/unidades" ? tabActivo : tanInactivo}>
@@ -87,7 +87,7 @@ export default function Header() {
         <NavLink to="/mediciones" >Mediciones</NavLink>
       </span>
       <span class="block px-4 py-2 text-sm text-gray-300 hover:bg-white/5 cursor-pointer">
-        <NavLink to="/sensores" >Sensores</NavLink>
+        <NavLink to="/dataloggers" >Dataloggers</NavLink>
       </span>
     </el-menu>
   </el-disclosure>
