@@ -16,6 +16,7 @@ def create_app():
     from .routes.unidades import Unidades
     from .routes.tipo_sensor import TipoSensor
     from .routes.sensores import Sensores
+    from .routes.dataloggers import Dataloggers
     from .routes.mediciones import Mediciones
     from .routes.usuarios import Usuarios
     from .routes.empresas import Empresas
@@ -61,6 +62,7 @@ def create_app():
         unidades_bp,
         tipo_sensor_bp,
         sensores_bp,
+        dataloggers_bp,
         mediciones_bp,
         usuarios_bp,
         empresas_bp,
@@ -70,6 +72,7 @@ def create_app():
     app.register_blueprint(unidades_bp, url_prefix="/unidades")
     app.register_blueprint(tipo_sensor_bp, url_prefix="/tipo_sensor")
     app.register_blueprint(sensores_bp, url_prefix="/sensores")
+    app.register_blueprint(dataloggers_bp, url_prefix="/dataloggers")
     app.register_blueprint(mediciones_bp, url_prefix="/mediciones")
     app.register_blueprint(usuarios_bp, url_prefix="/usuarios")
     app.register_blueprint(empresas_bp, url_prefix="/empresas")

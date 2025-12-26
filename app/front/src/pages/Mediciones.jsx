@@ -5,11 +5,13 @@ export default function Mediciones() {
   const [mediciones, setMediciones] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [dataloggers, setDataloggers] = useState([])
 
   useEffect(() => {
     api.get("/mediciones/")
       .then(res => {
         setMediciones(res.data)
+        console.log(res.data)
       })
       .catch(err => {
         console.error(err)
@@ -20,11 +22,26 @@ export default function Mediciones() {
       })
   }, [mediciones.length])
 
+  useEffect(() => {
+    api.get("/dataloggers/")
+      .then(res => {
+        setDataloggers(res.data)
+      })
+      .catch(err => {
+        console.error(err)
+        setError("Error cargando dataloggers")
+      })
+      .finally(() => {
+        setLoading(false)
+      })
+  }, [])
+
   const crearMedicion = (e) => {
     e.preventDefault()
     const form = e.target 
     const nuevaMedicion = {
-      usuario_id: form.usuario_id.value,
+      id_sensor: form.sensor_id.value,
+      numero_de_serie: form.numero_de_serie.value,
       medicion: form.medicion.value
     }
 
@@ -40,6 +57,7 @@ export default function Mediciones() {
   }
 
 
+
   return (
     <>
     <h1 className="text-2xl font-bold">
@@ -47,8 +65,19 @@ export default function Mediciones() {
     </h1>
     <form id="form-medicion" className="" onSubmit={crearMedicion}>
       <div class="mb-3">
-        <label class="form-label">Usuario ID</label>
-        <input name="usuario_id" type="number" class="form-control" required/>
+        <label class="form-label">Sensor ID</label>
+        <input name="sensor_id" type="number" class="form-control" required/>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Número de Serie del Datalogger</label>
+        <select name="numero_de_serie" class="form-select mb-3" required>
+          <option value="">Seleccione un Datalogger</option>
+          {dataloggers.map(datalogger => (
+            <option key={datalogger.id} value={datalogger.numero_de_serie}>
+              {datalogger.numero_de_serie}
+            </option>
+          ))}
+        </select>
       </div>
       <div class="mb-3">
         <label class="form-label">Medición</label>
@@ -60,8 +89,9 @@ export default function Mediciones() {
       {mediciones.map(medicion => (
         <li
           key={medicion.id}
-          className="p-4 bg-black rounded shadow">
-          <p className="font-semibold">ID Usuario: {medicion.usuario_id}</p>
+          className="p-4 rounded shadow">
+          <p className="font-semibold">Sensor ID: {medicion.id_sensor}</p>
+          <p className="font-semibold">Numero de serie: {medicion.datalogger.numero_de_serie}</p>
           <p className="text-sm text-gray-600">Medición: {medicion.medicion}</p>
         </li>
       ))}
