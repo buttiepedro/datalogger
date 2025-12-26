@@ -35,7 +35,7 @@ export default function TablaEmpresas({empresas, error, loading, onEliminar}){
           </tr>
         )}
         {!loading && !error && empresas.map((e) => (
-          <tr key={e.id}>
+          <tr key={e.id} className="animate-fade-down animate-duration-300">
             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{e.id}</td>
             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{e.nombre}</td>
             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{e.direccion}</td>

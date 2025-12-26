@@ -45,7 +45,7 @@ export default function TablaUsuarios({usuarios, error, loading, onEliminar}){
           </tr>
         )}
         {!loading && !error && usuarios.map((e) => (
-          <tr key={e.id} className="">
+          <tr key={e.id} className="animate-fade-down animate-duration-300">
             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{e.nombre}</td>
             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{e.email}</td>
             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{e.empresa}</td>
