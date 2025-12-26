@@ -67,7 +67,7 @@ export default function Header() {
             </svg>
           </button>
 
-          <el-menu anchor="bottom end" popover className="w-48 origin-top-right mt-4 rounded-md bg-gray-800 py-1 outline -outline-offset-1 outline-white/10 transition transition-discrete [--anchor-gap:--spacing(1.5)] data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in">
+          <el-menu anchor="bottom end" popover className="w-48 origin-top-right mt-4 rounded-b-md bg-blue-900 py-1  transition transition-discrete [--anchor-gap:--spacing(1.5)] data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in">
             <p onClick={cerrarSesion} class="block px-4 py-2 text-sm text-gray-300 hover:bg-white/5 cursor-pointer">Cerrar sesion</p>
           </el-menu>
         </el-dropdown>
@@ -75,8 +75,8 @@ export default function Header() {
     </div>
   </div>
 
-  <el-disclosure id="mobile-menu" hidden class="absolute block sm:hidden w-48 origin-top-right rounded-l-none rounded-md bg-gray-800 py-1 outline -outline-offset-1 outline-white/10 transition transition-discrete [--anchor-gap:--spacing(2)] data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in">
-    <el-menu  class="space-y-1 pt-2 pb-3">
+  <el-disclosure id="mobile-menu" hidden class="absolute block sm:hidden w-48 origin-top-right rounded-br-md outline-none bg-blue-900 py-1 transition transition-discrete [--anchor-gap:--spacing(2)] data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in">
+    <el-menu  class="space-y- pt-2 pb-3">
       <span class="block px-4 py-2 text-sm text-gray-300 hover:bg-white/5 cursor-pointer">
         <NavLink to="/tipos-de-sensores" aria-current="page" >Tipos de sensor</NavLink>
       </span>

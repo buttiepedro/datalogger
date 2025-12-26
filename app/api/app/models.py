@@ -106,7 +106,7 @@ class Mediciones(db.Model):
     __tablename__ = "mediciones"
     id = db.Column(db.Integer, primary_key=True)
     numero_de_serie = db.Column(db.Integer, db.ForeignKey("dataloggers.numero_de_serie"))
-    id_sensor = db.Column(db.Integer, db.ForeignKey("sensores.id"))
+    id_sensor = db.Column(db.Integer)
     medicion = db.Column(db.Integer)
 
     datalogger = db.relationship("Dataloggers")
@@ -115,6 +115,6 @@ class Mediciones(db.Model):
         return {
             "id": self.id,
             "datalogger": self.datalogger.to_dict() if self.datalogger else None,
-            "id_sensor": self.id_sensor.to_dict() if self.id_sensor else None,
+            "id_sensor": self.id_sensor,
             "medicion": self.medicion,
         }
