@@ -29,7 +29,7 @@ export const AuthProvider = ({ children }) => {
     // PERSISTENCIA: Ejecutar al cargar la web
     useEffect(() => {
       const token = localStorage.getItem("token") || sessionStorage.getItem("token");
-      if (token) {
+      if (token && jwtDecode(token).exp * 1000 > Date.now()) {
         saveUserFromToken(token);
       }
       setLoading(false);
