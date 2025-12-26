@@ -3,6 +3,7 @@ from ..database import db
 from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
 from ..models import Usuarios
 from ..docorators import admin_required
+from math import ceil # Para el cálculo de páginas
 
 usuarios_bp = Blueprint("usuarios", __name__)
 
@@ -15,14 +16,48 @@ def check_jwt():
 @usuarios_bp.get("/")
 @admin_required
 def get_usuarios():
+  # 1. Recibir parámetros
+  page = int(request.args.get('page', 1))
+  per_page = int(request.args.get('per_page', 5))
+
+  # 2. Calcular offset y limit
+  offset = (page - 1) * per_page
+  limit = per_page
+
+  # 3. Consultar la base de datos
+  # Consulta para obtener el total de items
+  total_items = db.session.query(Usuarios).count()
+
+  # Consulta para obtener los items de la página actual
+  items_pagina = Usuarios.query.offset(offset).limit(limit).all()
+
+  # 4. Calcular metadatos
+  total_pages = ceil(total_items / per_page)
+
   claims = get_jwt()
   usuario_logeado_id = get_jwt_identity()
+  # Paginacion
   if claims.get("is_superuser"):
+    # Filtro del usuario logeado para que no aparezca en la lista
     usuarios = Usuarios.query.filter( Usuarios.id != usuario_logeado_id).all()
-    return jsonify([u.to_dict() for u in usuarios])
+    return jsonify({
+    "usuarios":[u.to_dict() for u in usuarios],
+    'pagination': {
+      'total_items': total_items,
+      'total_pages': total_pages,
+      'current_page': page,
+      'per_page': per_page
+    }})
   empresa = claims.get("id_empresa")
   usuarios = Usuarios.query.filter(Usuarios.id_empresa == empresa, Usuarios.id != usuario_logeado_id).all()
-  return jsonify([u.to_dict() for u in usuarios])
+  return jsonify({
+    "usuarios":[u.to_dict() for u in usuarios],
+    'pagination': {
+      'total_items': total_items,
+      'total_pages': total_pages,
+      'current_page': page,
+      'per_page': per_page
+    }})
 
 @usuarios_bp.post("/")
 @admin_required

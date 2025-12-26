@@ -17,11 +17,24 @@ def check_jwt():
 def get_sensores():
     claims = get_jwt()
     empresa=claims["id_empresa"]
-    # Obtener solo los sensores que pertenecen a la empresa del usuario autenticado
-    sensores = Sensores.query.join(Dataloggers).filter_by(id_empresa=empresa).all()
-    if sensores is []:
-      return jsonify({"error": "No existen sensores"}), 404
-    return jsonify([s.to_dict() for s in sensores]), 200
+    sensores = Sensores.query.all()
+    return jsonify([s.to_dict() for s in sensores])
+
+
+# @sensores_bp.get("/<int:sensor_id>")
+# @jwt_required()
+# def get_sensor(sensor_id):
+#     s = Sensores.query.get(sensor_id)
+#     if not s:
+#         return jsonify({"error": "No existe"}), 404
+
+#     return jsonify({
+#         "id": s.id,
+#         "id_empresa": s.id_empresa,
+#         "nombre": s.nombre,
+#         "ubicacion": s.ubicacion,
+#         "tipo_id": s.tipo_id
+#     }), 200
 
 @sensores_bp.post("/")
 @admin_required
