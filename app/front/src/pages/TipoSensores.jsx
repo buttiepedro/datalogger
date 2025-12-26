@@ -39,19 +39,31 @@ export default function TipoSensores() {
     const nuevoTipoSensor = {
       nombre: form.nombre.value,
       descripcion: form.descripcion.value,
-      unidad_id: form.unidad_id.value,
+      id_unidad: form.unidad_id.value,
       medicion_min: form.medicion_min.value,
       medicion_max: form.medicion_max.value
     }
     api.post("/tipo_sensor/", nuevoTipoSensor)
       .then(res => {
-        alert("Tipo de sensor creado con éxito")
+        setTiposSensores([...tiposSensores, res.data])
         form.reset()
       })
       .catch(err => {
         console.error(err)
         alert("Error creando tipo de sensor")
       })  
+  }
+
+  const eliminarTipoSensor = (id) => {
+    api.delete(`/tipo_sensor/${id}`)
+      .then(res => {
+        setTiposSensores(tiposSensores.filter(tipo => tipo.id !== id))
+      }
+      )
+      .catch(err => {
+        console.error(err)
+        alert("Error eliminando tipo de sensor")
+      })
   }
 
   return (
@@ -93,10 +105,19 @@ export default function TipoSensores() {
         {tiposSensores.map(tipo => (
           <li
             key={tipo.id}
-            className="p-4 bg-black rounded shadow"
+            className="p-4 rounded shadow"
           >
-            <p className="font-semibold">{tipo.nombre}</p>
-            <p className="text-sm text-gray-600">{tipo.descripcion}</p>
+            <p className="font-semibold">Tipo: {tipo.nombre}</p>
+            <p className="text-sm text-gray-600">Descripción: {tipo.descripcion}</p>
+            <p className="text-sm text-gray-600">Unidad: {tipo.id_unidad}</p>
+            <p className="text-sm text-gray-600">Medición Min: {tipo.medicion_min}</p>
+            <p className="text-sm text-gray-600">Medición Max: {tipo.medicion_max}</p>
+            <button
+              className="mt-2 px-4 py-1 bg-red-600 text-white rounded-md"
+              onClick={() => eliminarTipoSensor(tipo.id)}
+            >
+              Eliminar Tipo
+            </button>
           </li>
         ))}
       </ul>

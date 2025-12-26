@@ -62,23 +62,66 @@ class TipoSensor(db.Model):
 
     unidad = db.relationship("Unidades")
 
-
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "nombre": self.nombre,
+            "descripcion": self.descripcion,
+            "id_unidad": self.unidad.nombre if self.unidad else None,
+            "medicion_min": self.medicion_min,
+            "medicion_max": self.medicion_max,
+        }
+    
 class Sensores(db.Model):
     __tablename__ = "sensores"
+    id = db.Column(db.Integer, primary_key=True)
+    sensor_id = db.Column(db.Integer)
+    id_datalogger = db.Column(db.Integer, db.ForeignKey("dataloggers.id"))
+    tipo_sensor = db.Column(db.Integer, db.ForeignKey("tipo_sensor.id"))
+
+    tipo = db.relationship("TipoSensor")
+    datalogger = db.relationship("Dataloggers")
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "id_datalogger": self.datalogger.nombre if self.datalogger else None,
+            "sensor_id": self.sensor_id,
+            "tipo_sensor": self.tipo.nombre if self.tipo else None,
+        }
+
+class Dataloggers(db.Model):
+    __tablename__ = "dataloggers"
     id = db.Column(db.Integer, primary_key=True)
     id_empresa = db.Column(db.Integer, db.ForeignKey("empresas.id"))
     nombre = db.Column(db.String)
     ubicacion = db.Column(db.Text)
-    id_tipo = db.Column(db.Integer, db.ForeignKey("tipo_sensor.id"))
-
-    tipo = db.relationship("TipoSensor")
+    numero_de_serie = db.Column(db.Integer, unique=True)
+    
     empresa = db.relationship("Empresas")
 
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "nombre": self.nombre,
+            "ubicacion": self.ubicacion,
+            "numero_de_serie": self.numero_de_serie,
+            "empresa": self.empresa.nombre if self.empresa else None,
+        }
 
 class Mediciones(db.Model):
     __tablename__ = "mediciones"
     id = db.Column(db.Integer, primary_key=True)
-    id_sensor = db.Column(db.Integer, db.ForeignKey("sensores.id"))
+    numero_de_serie = db.Column(db.Integer, db.ForeignKey("dataloggers.numero_de_serie"))
+    id_sensor = db.Column(db.Integer)
     medicion = db.Column(db.Integer)
 
-    sensor = db.relationship("Sensores")
+    datalogger = db.relationship("Dataloggers")
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "datalogger": self.datalogger.to_dict() if self.datalogger else None,
+            "id_sensor": self.id_sensor,
+            "medicion": self.medicion,
+        }

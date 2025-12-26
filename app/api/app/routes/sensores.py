@@ -1,10 +1,13 @@
 from flask import Blueprint, request, jsonify
 from ..database import db
-from ..models import Sensores
 from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
+from ..models import Sensores
 from ..docorators import admin_required
+from ..models import Dataloggers
 
 sensores_bp = Blueprint("sensores", __name__)
+
+# Esta línea protege TODAS las rutas que pertenezcan a este blueprint
 @sensores_bp.before_request
 @jwt_required()
 def check_jwt():
@@ -36,24 +39,12 @@ def get_sensores():
 @sensores_bp.post("/")
 @admin_required
 def add_sensor():
-    data = request.json
-    s = Sensores(
-        id_empresa=data["id_empresa"],
-        nombre=data["nombre"],
-        ubicacion=data["ubicacion"],
-        tipo_id=data["tipo_id"]
-    )
-    db.session.add(s)
-    db.session.commit()
-    return jsonify({"msg": "Sensor creado", "id": s.id})
-
-
-@sensores_bp.delete("/<int:sensor_id>")
-@admin_required
-def delete_sensor(sensor_id):
-    s = Sensores.query.get(sensor_id)
-    if not s:
-        return jsonify({"error": "No existe"}), 404
-    db.session.delete(s)
-    db.session.commit()
-    return jsonify({"msg": "Sensor eliminado"})
+  data = request.json
+  s = Sensores(
+    sensor_id=data["sensor_id"],
+    id_datalogger=data["id_datalogger"],
+    tipo_sensor=data["tipo_sensor"]
+  )
+  db.session.add(s)
+  db.session.commit()
+  return jsonify(s.to_dict()), 201
