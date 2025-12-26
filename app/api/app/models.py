@@ -90,9 +90,7 @@ class Dataloggers(db.Model):
     nombre = db.Column(db.String)
     ubicacion = db.Column(db.Text)
     numero_de_serie = db.Column(db.Integer, unique=True)
-    id_tipo = db.Column(db.Integer, db.ForeignKey("tipo_sensor.id"))
-
-    tipo = db.relationship("TipoSensor")
+    
     empresa = db.relationship("Empresas")
 
     def to_dict(self):
@@ -101,7 +99,6 @@ class Dataloggers(db.Model):
             "nombre": self.nombre,
             "ubicacion": self.ubicacion,
             "numero_de_serie": self.numero_de_serie,
-            "id_tipo": self.tipo.nombre if self.tipo else None,
             "empresa": self.empresa.nombre if self.empresa else None,
         }
 
