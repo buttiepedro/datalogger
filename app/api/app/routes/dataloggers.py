@@ -46,8 +46,7 @@ def add_sensor():
         id_empresa=empresa,
         nombre=data["nombre"],
         ubicacion=data["ubicacion"],
-        numero_de_serie=data["numero_de_serie"],
-        id_tipo=data["id_tipo"]
+        numero_de_serie=data["numero_de_serie"]
     )
     db.session.add(s)
     db.session.commit()

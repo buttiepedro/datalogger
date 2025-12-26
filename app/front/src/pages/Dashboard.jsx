@@ -5,7 +5,6 @@ import { AuthContext } from "../context/AuthContext";
 
 export default function Dashboard() {
   const { user } = useContext(AuthContext);
-  console.log(user)
   return (
     <>
     {user && user.isSuperuser ?

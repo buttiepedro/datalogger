@@ -15,10 +15,10 @@ def check_jwt():
 
 @sensores_bp.get("/")
 def get_sensores():
-    claims = get_jwt()
-    empresa=claims["id_empresa"]
-    sensores = Sensores.query.all()
-    return jsonify([s.to_dict() for s in sensores])
+  claims = get_jwt()
+  empresa=claims["id_empresa"]
+  sensores = Sensores.query.join(Dataloggers).filter(Dataloggers.id_empresa==empresa).all()
+  return jsonify([s.to_dict() for s in sensores])
 
 
 # @sensores_bp.get("/<int:sensor_id>")

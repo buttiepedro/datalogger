@@ -57,14 +57,12 @@ export default function Dataloggers() {
     api.post("/dataloggers/", {
       nombre: form.nombre.value,
       ubicacion: form.ubicacion.value,
-      id_tipo: form.id_tipo.value,
-      numero_de_serie: form.numero_de_serie.value
+      numero_de_serie: form.numero_de_serie.value,
     })
     .then(res => {
       setDataloggers([...dataloggers, res.data])
     })
     .catch(err => {
-      console.error(err)
       setError("Error creando datalogger")
     })
   }

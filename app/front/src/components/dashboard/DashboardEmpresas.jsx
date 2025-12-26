@@ -1,17 +1,29 @@
 import { useEffect,useState } from "react"
 import api from "../../services/api"
 import TablaUsuarios from "./TablaUsuarios"
+import FormUsuarios from "./FormUsuarios"
+import { useAuth } from "../../context/AuthContext"
+import Pagination from "../Pagination"
+
 
 
 export default function Dashboard() {
+  const { user } = useAuth()
   const [usuarios, setUsuarios] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [usuariosPagination, setUsuariosPagination] = useState({
+    current_page: 1,
+    total_items: 0,
+    total_pages: 0,
+    per_page: 5
+  })
 
   const getUsuarios = () => {
-    api.get("/usuarios/")
+    api.get(`/usuarios/?page=${usuariosPagination.current_page}`)
       .then((res) => {
-        setUsuarios(res.data)
+        setUsuarios(res.data.usuarios)
+        setUsuariosPagination(res.data.pagination)
       })
       .catch((err) => {
         setError(err)
@@ -22,7 +34,7 @@ export default function Dashboard() {
   }
   useEffect(() => {
     getUsuarios()
-  }, [usuarios.length])
+  }, [usuarios.length, usuariosPagination.current_page])
 
   const crearUsuario = (e) => {
     e.preventDefault()
@@ -39,7 +51,6 @@ export default function Dashboard() {
         form.reset()
       })
       .catch((err) => {
-        console.error(err)
         alert("Error creando usuario")
       })
   }
@@ -54,11 +65,18 @@ export default function Dashboard() {
         setUsuarios(usuarios.filter(u => u.id !== id))
       })
       .catch(err => {
-        console.error(err)
         alert("Error eliminando usuario")
       })
   }
   
+  const handlePageChange = (page) => {
+    setUsuariosPagination(() => ({
+      ...usuariosPagination,
+      current_page: page
+    }))
+    getUsuarios()
+  }
+
   return (
     <>
       <div className="">
@@ -70,31 +88,16 @@ export default function Dashboard() {
         <div className="overflow-auto">
           <h2>Lista de Usuarios</h2>
           <TablaUsuarios usuarios={usuarios} loading={loading} error={error} onEliminar={eliminarUsuario}/>
+          <Pagination
+            currentPage={usuariosPagination.current_page}
+            totalPages={usuariosPagination.total_pages}
+            totalItems={usuariosPagination.total_items}
+            esEmpresa={false}
+            onPageChange={handlePageChange}
+          />
+
         </div>
-        <form onSubmit={crearUsuario} className="mt-4">
-          <h2 className="text-xl font-semibold mb-2">Crear Nuevo Usuario</h2>
-          <div className="mb-3">
-            <label className="block mb-1" htmlFor="nombre">Nombre:</label>
-            <input className="border p-2 w-full" type="text" id="nombre" name="nombre" required />
-          </div>
-          <div className="mb-3">
-            <label className="block mb-1" htmlFor="email">Correo:</label>
-            <input className="border p-2 w-full" type="text" id="email" name="email" required />
-          </div>
-          <div className="mb-3">
-            <label className="block mb-1" htmlFor="password">Contraseña:</label>
-            <input className="border p-2 w-full" type="password" id="password" name="password" required />
-          </div>
-          <div className="mb-3">
-            <label className="inline-flex items-center">
-              <label className="block mb-1" htmlFor="is_admin">Es admin?</label>
-              <input className="ml-2" type="checkbox" id="is_admin" name="is_admin"/>
-            </label>
-          </div>
-          <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
-            Crear Usuario
-          </button>
-        </form>
+        <FormUsuarios onSubmit={crearUsuario} superUsuario={user}/>
       </div>
     </>
   )

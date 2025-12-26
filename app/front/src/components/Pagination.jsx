@@ -17,7 +17,7 @@ export default function Pagination({currentPage, totalPages, esEmpresas, totalIt
                 }
                 onPageChange(currentPage - 1,esEmpresas)
               }}
-              className="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 cursor-pointer "
+              className="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 cursor-pointer z-10"
             >
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-6 hover:stroke-blue-900 active:stroke-blue-900">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
@@ -52,9 +52,9 @@ export default function Pagination({currentPage, totalPages, esEmpresas, totalIt
                 }
                 onPageChange(currentPage + 1,esEmpresas)
               }}
-              className=" cursor-pointer relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400"
+              className=" cursor-pointer relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 z-10"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-6 hover:stroke-blue-900 active:stroke-blue-900">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="z-0 size-6 hover:stroke-blue-900 active:stroke-blue-900">
                 <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
               </svg>
             </a>

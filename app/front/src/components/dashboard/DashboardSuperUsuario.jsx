@@ -5,10 +5,12 @@ import TableUsuarios from "./TablaUsuarios"
 import Pagination from "../Pagination"
 import FormUsuarios from "./FormUsuarios"
 import FormEmpresas from "./FormEmpresas"
+import { useAuth } from "../../context/AuthContext"
 
 
 export default function Dashboard() {
   // Estado para completar formulario de creacion de usuarios
+  const { user } = useAuth()
   const [listEmpresas, setListEmpresas] = useState([])
   // Estados para tablas y paginacion
   const [empresas, setEmpresas] = useState([])
@@ -199,7 +201,7 @@ useEffect(() => {
           onPageChange={handlePageChange}
           >
         </Pagination>
-        <FormUsuarios empresas={listEmpresas} onSubmit={crearUsuario} />
+        <FormUsuarios empresas={listEmpresas} onSubmit={crearUsuario} superUsuario={user} />
         <FormEmpresas onSubmit={crearEmpresa} />
       </div>
     </>

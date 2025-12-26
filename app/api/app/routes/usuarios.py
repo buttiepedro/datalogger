@@ -28,9 +28,6 @@ def get_usuarios():
   # Consulta para obtener el total de items
   total_items = db.session.query(Usuarios).count()
 
-  # Consulta para obtener los items de la página actual
-  items_pagina = Usuarios.query.offset(offset).limit(limit).all()
-
   # 4. Calcular metadatos
   total_pages = ceil(total_items / per_page)
 
@@ -39,7 +36,7 @@ def get_usuarios():
   # Paginacion
   if claims.get("is_superuser"):
     # Filtro del usuario logeado para que no aparezca en la lista
-    usuarios = Usuarios.query.filter( Usuarios.id != usuario_logeado_id).all()
+    usuarios = Usuarios.query.filter( Usuarios.id != usuario_logeado_id).offset(offset).limit(limit).all()
     return jsonify({
     "usuarios":[u.to_dict() for u in usuarios],
     'pagination': {
@@ -49,7 +46,7 @@ def get_usuarios():
       'per_page': per_page
     }})
   empresa = claims.get("id_empresa")
-  usuarios = Usuarios.query.filter(Usuarios.id_empresa == empresa, Usuarios.id != usuario_logeado_id).all()
+  usuarios = Usuarios.query.filter(Usuarios.id_empresa == empresa, Usuarios.id != usuario_logeado_id).offset(offset).limit(limit).all()
   return jsonify({
     "usuarios":[u.to_dict() for u in usuarios],
     'pagination': {
