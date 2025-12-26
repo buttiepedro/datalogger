@@ -42,7 +42,7 @@ def add_medicion():
     )
     db.session.add(m)
     db.session.commit()
-    return jsonify({"msg": "Medición creada", "id": m.id})
+    return jsonify({"msg": "Medición agregada", "id": m.id}), 201
 
 
 @mediciones_bp.delete("/<int:medicion_id>")
@@ -53,4 +53,4 @@ def delete_medicion(medicion_id):
         return jsonify({"error": "No existe"}), 404
     db.session.delete(m)
     db.session.commit()
-    return jsonify({"msg": "Medición eliminada"})
+    return jsonify({"msg": "Medición eliminada"}), 200

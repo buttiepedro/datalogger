@@ -82,7 +82,6 @@ export default function Dataloggers() {
             <h2 className="text-2xl font-semibold">{datalogger.nombre}</h2>
             <p>Ubicación: {datalogger.ubicacion}</p>
             <p>Número de Serie: {datalogger.numero_de_serie}</p>
-            <p>Tipo ID: {datalogger.id_tipo}</p>
             { user.isSuperuser && <p>Empresa: {datalogger.empresa}</p> }
           </li>
         ))}
@@ -100,15 +99,6 @@ export default function Dataloggers() {
         <div className="mb-3">
           <label className="block mb-1" htmlFor="numero_de_serie">Número de Serie:</label>
           <input className="border p-2 w-full" type="text" id="numero_de_serie" name="numero_de_serie" required />
-        </div>
-        <div>
-          <label className="block mb-1" htmlFor="id_tipo">tipo de sensor:</label>
-          <select name="id_tipo" id="id_tipo" className="border p-2 w-full mb-3" required>
-            <option value="">Seleccione un tipo de sensor</option>
-            {tiposSensores.map(tipo => (
-              <option value={tipo.id} key={tipo.id}>{tipo.nombre}</option>
-            ))}
-          </select>
         </div>
         <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
           Crear Datalogger
