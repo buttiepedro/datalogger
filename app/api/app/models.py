@@ -8,6 +8,13 @@ class Empresas(db.Model):
     nombre = db.Column(db.String)
     direccion = db.Column(db.String)
 
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "nombre": self.nombre,
+            "direccion": self.direccion
+        }
+
 class Usuarios(db.Model):
     __tablename__ = "usuarios"
     id = db.Column(db.Integer, primary_key=True)

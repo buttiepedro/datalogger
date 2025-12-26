@@ -1,4 +1,4 @@
-import Spiner from "./Spiner"
+import Spiner from "../Spiner"
 export default function TablaUsuarios({usuarios, error, loading, onEliminar}){
   return (
     <>

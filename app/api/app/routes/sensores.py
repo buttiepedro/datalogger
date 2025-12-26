@@ -14,18 +14,8 @@ def check_jwt():
 def get_sensores():
     claims = get_jwt()
     empresa=claims["id_empresa"]
-    sensores = Sensores.query.filter_by(id_empresa=empresa).all()
-    data = [
-        {
-            "id": s.id,
-            "id_empresa": s.id_empresa,
-            "nombre": s.nombre,
-            "ubicacion": s.ubicacion,
-            "tipo_id": s.tipo_id
-        }
-        for s in sensores
-    ]
-    return jsonify(data), 200
+    sensores = Sensores.query.all()
+    return jsonify([s.to_dict() for s in sensores])
 
 
 # @sensores_bp.get("/<int:sensor_id>")
