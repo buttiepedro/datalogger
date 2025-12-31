@@ -1,4 +1,4 @@
-import { useEffect,useState } from "react"
+import { use, useEffect,useState } from "react"
 import api from "../../services/api"
 import TablaUsuarios from "./TablaUsuarios"
 import FormUsuarios from "./FormUsuarios"
@@ -11,7 +11,12 @@ export default function Dashboard() {
   const { user } = useAuth()
   const [usuarios, setUsuarios] = useState([])
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
+  const [error, setError] = useState()
+  const [errorCrear, setErrorCrear] = useState({
+    error: null, 
+    state: false,
+  })
+  const [showForm, setShowForm] = useState(false)
   const [usuariosPagination, setUsuariosPagination] = useState({
     current_page: 1,
     total_items: 0,
@@ -49,9 +54,14 @@ export default function Dashboard() {
       .then((res) => {
         setUsuarios([...usuarios, res.data])
         form.reset()
+        setShowForm(false)
+        setErrorCrear({
+          error: null, 
+          state: false,
+        })
       })
       .catch((err) => {
-        alert("Error creando usuario")
+        setErrorCrear(err.response.data)
       })
   }
 
@@ -77,12 +87,29 @@ export default function Dashboard() {
     getUsuarios()
   }
 
+  const handleShowForm = (e) => {
+    window.scrollTo(0,0)
+    setShowForm(!showForm)
+    //desactivar scroll de fondo
+    document.body.style.overflow = showForm ? "auto" : "hidden";
+  }
+
   return (
     <>
       <div className="">
         <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
           <h1 className="text-3xl font-bold tracking-tight text-sky-950">Dashboard</h1>
         </div>
+      </div>
+      <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+        <button
+          onClick={handleShowForm}
+          className="mb-4 rounded-md bg-blue-900 py-2 px-4 text-base font-semibold text-white hover:bg-blue-800 "
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6 hover:fill-white">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
+          </svg>
+        </button>
       </div>
       <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
         <div className="overflow-auto">
@@ -97,7 +124,7 @@ export default function Dashboard() {
           />
 
         </div>
-        <FormUsuarios onSubmit={crearUsuario} superUsuario={user}/>
+        <FormUsuarios onSubmit={crearUsuario} superUsuario={user} showForm={showForm} error={errorCrear} setShowForm={setShowForm} setError={setErrorCrear}/>
       </div>
     </>
   )

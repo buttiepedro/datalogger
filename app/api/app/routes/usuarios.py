@@ -24,17 +24,12 @@ def get_usuarios():
   offset = (page - 1) * per_page
   limit = per_page
 
-  # 3. Consultar la base de datos
-  # Consulta para obtener el total de items
-  total_items = db.session.query(Usuarios).count()
-
-  # 4. Calcular metadatos
-  total_pages = ceil(total_items / per_page)
-
   claims = get_jwt()
   usuario_logeado_id = get_jwt_identity()
   # Paginacion
   if claims.get("is_superuser"):
+    total_items = db.session.query(Usuarios).count()
+    total_pages = ceil(total_items / per_page)
     # Filtro del usuario logeado para que no aparezca en la lista
     usuarios = Usuarios.query.filter( Usuarios.id != usuario_logeado_id).offset(offset).limit(limit).all()
     return jsonify({
@@ -46,7 +41,14 @@ def get_usuarios():
       'per_page': per_page
     }})
   empresa = claims.get("id_empresa")
+
   usuarios = Usuarios.query.filter(Usuarios.id_empresa == empresa, Usuarios.id != usuario_logeado_id).offset(offset).limit(limit).all()
+  # 3. Consultar la base de datos
+  # Consulta para obtener el total de items
+  total_items = db.session.query(Usuarios).filter(Usuarios.id_empresa == empresa).count()
+
+  # 4. Calcular metadatos
+  total_pages = ceil(total_items / per_page)
   return jsonify({
     "usuarios":[u.to_dict() for u in usuarios],
     'pagination': {
@@ -74,6 +76,11 @@ def create_usuario():
     is_superuser=data.get("is_superuser", False)
   )
   u.set_password(data["password"])
+
+  if u.email in [user.email for user in Usuarios.query.filter_by(email=u.email).all()]:
+    return jsonify({"error": "El email ya existe","state": True}), 400
+  
+  
   db.session.add(u)
   db.session.commit()
   return jsonify({"msg": "Usuario creado", "id": u.id}), 201
