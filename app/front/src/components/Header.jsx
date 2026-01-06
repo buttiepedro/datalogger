@@ -31,7 +31,7 @@ export default function Header() {
       <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
         <div class="flex shrink-0 items-center">
           <NavLink to="/dashboard">
-            <img src="https://bitautomatizacion.com.ar/assets/fondo-fE01IHFW.png" alt="Your Company" class="h-8 w-auto" />
+            <img src="https://bitautomatizacion.com.ar/wp-content/uploads/2025/12/cropped-Copy-of-LOGOPNG.png" alt="Your Company" class="h-8 w-auto" />
           </NavLink>
         </div>
         <div class="hidden sm:ml-6 sm:block">

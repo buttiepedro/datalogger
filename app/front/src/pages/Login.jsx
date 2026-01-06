@@ -9,6 +9,7 @@ export default function Login() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState({state: false, error: ""})
   const [rememberMe, setRememberMe] = useState(false)
   const navigate = useNavigate();
 
@@ -28,8 +29,12 @@ export default function Login() {
         }, 3000)
       })
       .catch(err => {
-        alert("Error en login")
+        setError({state: true, error: err.response.data.msg})
       })
+  }
+
+  const handleSetErrorState = (e) => {
+    setError([error, error.state = false])
   }
 
   return (
@@ -39,7 +44,7 @@ export default function Login() {
         <div className="sm:mx-auto sm:w-full sm:max-w-sm ">
           <img
             alt="Your Company"
-            src="https://bitautomatizacion.com.ar/assets/fondo-fE01IHFW.png"
+            src="https://bitautomatizacion.com.ar/wp-content/uploads/2025/12/cropped-Copy-of-LOGOPNG.png"
             className="mx-auto h-10 w-auto"
           />
           <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-white">Iniciar Sesión </h2>
@@ -51,15 +56,17 @@ export default function Login() {
               <label htmlFor="email" className="block text-sm/6 font-medium text-gray-100">
                 Correo Electrónico
               </label>
+              {error.state === true && <span className="text-red-500 text-xs flex animate-shake animate-once">{error.error}</span>}
               <div className="mt-2">
                 <input
                   id="email"
                   name="email"
                   type="email"
                   required
+                  onClick={handleSetErrorState}
                   autoComplete="username"
-                  onChange={e => setEmail(e.target.value)}
-                  className="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
+                  onChange={e => { setEmail(e.target.value); handleSetErrorState(); }}
+                  className={`block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 ${error.state ? " outline-red-500" : " outline-white/10"} placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6`}
                 />
               </div>
             </div>
@@ -81,9 +88,10 @@ export default function Login() {
                   name="password"
                   type="password"
                   required
-                  onChange={e => setPassword(e.target.value)}
+                  onClick={handleSetErrorState}
+                  onChange={e => { setPassword(e.target.value)}}
                   autoComplete="current-password"
-                  className="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
+                  className={`block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 ${error.state ? " outline-red-500" : " outline-white/10"} placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6`}
                 />
               </div>
               <div className="mt-2 flex items-center">

@@ -12,14 +12,14 @@ def login():
 
     # Validación básica
     if not data or "email" not in data or "password" not in data:
-        return {"msg": "Datos inválidos"}, 400
+        return {"msg": "Contraseña o email no proporcionados"}, 400
 
     # Buscar usuario
     user = Usuarios.query.filter_by(email=data["email"]).first()
 
     # Validar credenciales
     if not user or not user.check_password(data["password"]):
-        return {"msg": "Credenciales inválidas"}, 401
+        return {"msg": "Contraseña o email incorrectos"}, 401
 
     # Crear JWT
     token = create_access_token(

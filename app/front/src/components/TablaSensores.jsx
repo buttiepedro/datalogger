@@ -1,11 +1,14 @@
 import Spiner from "./Spiner";
-import { useContext, useEffect, useState } from "react";
+import { use, useContext, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
   
-export default function TablaSensores({ sensores, error, loading}){
+export default function TablaSensores({ sensores, error, loading, selectedSensor, setSelectedSensor }) {
   const { user } = useContext(AuthContext);
   // const [sensoresData, setSensoresData] = useState(sensores);
-
+  
+  const handleRowClick = (sensor) => {
+    setSelectedSensor(sensor);
+  }
   
 
   return (
@@ -58,7 +61,7 @@ export default function TablaSensores({ sensores, error, loading}){
           </tr>
         )}
         {sensores?.map((e) => (
-          <tr key={e.id}  className="animate-fade-down animate-duration-300 cursor-pointer hover:bg-gray-200 transition duration-300" >
+          <tr key={e.id}  className={`animate-fade-down animate-duration-300 cursor-pointer hover:bg-gray-200 transition duration-300 ${selectedSensor?.id === e.id ? 'bg-gray-300' : ''}`} onClick={() => handleRowClick(e)}>
             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{e.id}</td>
             { user.isSuperuser ? 
             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{e.datalogger.empresa}</td> 

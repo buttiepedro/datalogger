@@ -26,19 +26,25 @@ def get_mediciones():
     return jsonify([m.to_dict() for m in mediciones]), 200
 
 
+# obtener todas las mediciones de un sensor por su numero de serie y id_sensor
+@mediciones_bp.get("/sensor/<string:numero_de_serie>/<int:id_sensor>")
+def get_mediciones_sensor(numero_de_serie, id_sensor):
+    claims = get_jwt()
+    if not claims.get("is_superuser"):
+        empresa_id = claims.get("id_empresa")
+        datalogger = Dataloggers.query.filter_by(
+            numero_de_serie=numero_de_serie,
+            id_empresa=empresa_id
+        ).first()
+        if not datalogger:
+            return jsonify({"error": "No autorizado"}), 403
+    mediciones = Mediciones.query.filter_by(
+        numero_de_serie=numero_de_serie,
+        id_sensor=id_sensor
+    ).all()
+    return jsonify([m.to_dict() for m in mediciones]), 200
 
-@mediciones_bp.get("/<int:medicion_id>")
-def get_medicion(medicion_id):
-    m = Mediciones.query.get(medicion_id)
-    if not m:
-        return jsonify({"error": "No existe"}), 404
 
-    return jsonify({
-        "id": m.id,
-        "id_sensor": m.id_sensor,
-        "medicion": m.medicion,
-        "timestamp": m.timestamp if hasattr(m, "timestamp") else None
-    }), 200
 
 
 @mediciones_bp.post("/")
@@ -49,7 +55,8 @@ def add_medicion():
         numero_de_serie=data["numero_de_serie"],
         id_sensor=data["id_sensor"], 
         medicion=data["medicion"], 
-        hora= datetime.datetime.utcnow(),
+        # por default la hora actual
+        hora=data.get("hora", datetime.datetime.utcnow())
     )
     db.session.add(m)
     db.session.commit()
