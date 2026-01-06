@@ -1,52 +1,58 @@
-version: "3.9"
-
 services:
-
   # ======================
   # PostgreSQL
   # ======================
-  datalog_postgres:
-    image: postgres:15
-    container_name: datalog_postgres
-    restart: unless-stopped
+  db:
+    image: postgres:15-alpine
+    container_name: datalog_db_prod
+    restart: always
     environment:
-      POSTGRES_DB: datalog
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 0655084017a371192df3
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     volumes:
       - pgdata:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
+    # En producción NO exponemos la base de datos al exterior (sin puerto 5432:5432)
+    # Solo la API podrá verla internamente.
 
   # ======================
-  # API (Backend)
+  # API (Flask + Gunicorn)
   # ======================
   api:
     build:
       context: ./api
-    container_name: datalog_api
-    restart: unless-stopped
+      dockerfile: Dockerfile  # El que creamos con Gunicorn y slim
+    container_name: datalog_api_prod
+    restart: always
     env_file:
-      - ./api/.env
+      - ./api/.env.prod
+    environment:
+      - PYTHONPATH=/app
+      - DATABASE_URL=postgresql://${DB_USER}:${DB_PASSWORD}@db:5432/${DB_NAME}
+    # Ejecutamos migraciones/seeds y luego el servidor de producción
+    command: >
+      sh -c "python wait_for_db.py && 
+             python seed_script.py && 
+             python -m app.init_admin && 
+             gunicorn --bind 0.0.0.0:5000 --workers 3 app:app"
     depends_on:
-      - datalog_postgres
-    ports:
-      - "5000:5000"
+      - db
+    expose:
+      - "5000"
 
   # ======================
-  # Frontend
+  # Front (Nginx)
   # ======================
   front:
     build:
       context: ./front
-    container_name: datalog_front
-    restart: unless-stopped
-    env_file:
-      - ./front/.env
+      dockerfile: Dockerfile.prod # El que usa multi-stage build
+    container_name: datalog_front_prod
+    restart: always
+    ports:
+      - "80:80"  # El tráfico web entra por aquí
     depends_on:
       - api
-    ports:
-      - "8000:8000"
 
 volumes:
   pgdata:
