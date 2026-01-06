@@ -28,7 +28,7 @@ def create_app():
     # ----- CORS -----
     CORS(
         app,
-        resources={r"/*": {"origins": "*"}},
+        resources={r"/*": {"origins": "https://datalog-api-datalog.6kashx.easypanel.host/"}},
         supports_credentials=True,
         allow_headers=["Content-Type", "Authorization"],
         methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
