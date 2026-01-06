@@ -9,6 +9,7 @@ import Mediciones from "../pages/Mediciones"
 import Error404 from "../pages/Error404"
 import Login from "../pages/Login"
 import Dataloggers from "../pages/Dataloggers"
+import DataloggerById from "../pages/DataloggerById"
 
 export default function AppRoutes() {
   return (
@@ -20,11 +21,12 @@ export default function AppRoutes() {
         {/* Rutas para CUALQUIER usuario logeado */}
         <Route element={<ProtectedRoute />}>
           <Route path="/dataloggers" element={<Dataloggers />} />
+          <Route path="/dataloggers/:id_datalogger" element={<DataloggerById />} />
           <Route path="/mediciones" element={<Mediciones />} />
         </Route>
 
         {/* Rutas solo para ADMINS de empresa o Superusers */}
-        <Route element={<ProtectedRoute requiredRole="admin" />}>
+        <Route element={<ProtectedRoute requiredRole="admin"/>}>
           <Route path="/dashboard" element={<Dashboard />} />
         </Route>
 

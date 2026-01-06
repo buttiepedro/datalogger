@@ -1,4 +1,6 @@
 import datetime
+
+from sqlalchemy import func
 from app.database import db
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -85,9 +87,9 @@ class Sensores(db.Model):
     def to_dict(self):
         return {
             "id": self.id,
-            "id_datalogger": self.datalogger.nombre if self.datalogger else None,
+            "datalogger":  self.datalogger.to_dict() if self.datalogger else None,
             "sensor_id": self.sensor_id,
-            "tipo_sensor": self.tipo.nombre if self.tipo else None,
+            "tipo_sensor": self.tipo.to_dict() if self.tipo else None,
         }
 
 class Dataloggers(db.Model):
@@ -115,6 +117,7 @@ class Mediciones(db.Model):
     numero_de_serie = db.Column(db.Integer, db.ForeignKey("dataloggers.numero_de_serie"))
     id_sensor = db.Column(db.Integer)
     medicion = db.Column(db.Integer)
+    hora = db.Column(db.DateTime, server_default=func.now())
 
     datalogger = db.relationship("Dataloggers")
 
@@ -124,4 +127,40 @@ class Mediciones(db.Model):
             "datalogger": self.datalogger.to_dict() if self.datalogger else None,
             "id_sensor": self.id_sensor,
             "medicion": self.medicion,
+            "hora": self.hora.isoformat() if self.hora else None
+        }
+
+class Alertas(db.Model):
+    __tablename__ = "alertas"
+    id = db.Column(db.Integer, primary_key=True)
+    id_sensor = db.Column(db.Integer, db.ForeignKey("sensores.id"))
+    tiempo_de_tolerancia = db.Column(db.Integer)
+    id_tipo_sensor = db.Column(db.Integer, db.ForeignKey("tipo_sensor.id"))
+
+    sensor = db.relationship("Sensores")
+    tipo_sensor_id = db.relationship("TipoSensor")
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "sensor": self.sensor.to_dict() if self.sensor else None,
+            "tiempo_de_tolerancia": self.tiempo_de_tolerancia,
+            "tipo_sensor": self.tipo_sensor_id.to_dict() if self.tipo_sensor_id else None
+        }
+
+class Notificaciones(db.Model):
+    __tablename__ = "notificaciones"
+    id = db.Column(db.Integer, primary_key=True)
+    id_alerta = db.Column(db.Integer, db.ForeignKey("alertas.id"))
+    id_sensor = db.Column(db.Integer, db.ForeignKey("sensores.id"))
+    fecha_notificacion = db.Column(db.DateTime, server_default=func.now())
+
+    alerta = db.relationship("Alertas")
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "alerta": self.alerta.to_dict() if self.alerta else None,
+            "mensaje": self.mensaje,
+            "fecha_notificacion": self.fecha_notificacion.isoformat() if self.fecha_notificacion else None
         }

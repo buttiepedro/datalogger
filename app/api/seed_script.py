@@ -73,7 +73,7 @@ def seed_data():
         tipos.append(ts)
     db.session.commit()
 
-    # 5. Crear 5 Sensores y 2 Mediciones para cada uno
+    # 5. Crear 5 Sensores y 5 Mediciones para cada uno
     dataloggers = Dataloggers.query.all()
     for i in range(5):
         sensor = Sensores(
@@ -84,18 +84,17 @@ def seed_data():
         db.session.add(sensor)
         db.session.commit() # Para asegurar que existe el sensor antes de medir
 
-        # 6. 2 Mediciones por sensor
-        m1 = Mediciones(
-            numero_de_serie=dataloggers[i].numero_de_serie,
-            id_sensor=sensor.sensor_id,
-            medicion=20 + i
-        )
-        m2 = Mediciones(
-            numero_de_serie=dataloggers[i].numero_de_serie,
-            id_sensor=sensor.sensor_id,
-            medicion=25 + i
-        )
-        db.session.add_all([m1, m2])
+        # 6. 5 Mediciones por sensor
+        mediciones_a_agregar = []
+        for j in range(5):
+            m = Mediciones(
+                numero_de_serie=dataloggers[i].numero_de_serie,
+                id_sensor=sensor.sensor_id,
+                medicion=20 + i + j # Valor incremental para diferenciarlas
+            )
+            mediciones_a_agregar.append(m)
+        
+        db.session.add_all(mediciones_a_agregar)
 
     db.session.commit()
     print("¡Datos de prueba insertados con éxito!")

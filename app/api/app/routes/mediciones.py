@@ -1,7 +1,9 @@
 from flask import Blueprint, request, jsonify
+import datetime
 from ..database import db
 from ..models import Mediciones
-from flask_jwt_extended import jwt_required
+from ..models import Dataloggers
+from flask_jwt_extended import jwt_required, get_jwt, get_jwt_identity
 from ..docorators import admin_required
 
 mediciones_bp = Blueprint("mediciones", __name__)
@@ -12,7 +14,15 @@ def check_jwt():
 
 @mediciones_bp.get("/")
 def get_mediciones():
-    mediciones = Mediciones.query.all()
+    claims = get_jwt()
+    if claims.get("is_superuser"):
+        mediciones = Mediciones.query.all()
+        return jsonify([m.to_dict() for m in mediciones]), 200
+    empresa_id = claims.get("id_empresa")
+    numero_de_serie_datalogger = Dataloggers.query.filter_by(id_empresa=empresa_id).all()
+    mediciones = Mediciones.query.filter(Mediciones.numero_de_serie.in_(
+        [d.numero_de_serie for d in numero_de_serie_datalogger]
+    )).all()
     return jsonify([m.to_dict() for m in mediciones]), 200
 
 
@@ -39,6 +49,7 @@ def add_medicion():
         numero_de_serie=data["numero_de_serie"],
         id_sensor=data["id_sensor"], 
         medicion=data["medicion"], 
+        hora= datetime.datetime.utcnow(),
     )
     db.session.add(m)
     db.session.commit()

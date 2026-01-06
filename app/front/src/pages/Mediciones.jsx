@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import api from "../services/api"
+import MiGrafico from "../components/graficos/MiGrafico"
 
 export default function Mediciones() {
   const [mediciones, setMediciones] = useState([])
