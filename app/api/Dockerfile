@@ -45,4 +45,4 @@ USER appuser
 # Ejecutamos Gunicorn. 
 # "app:app" asume que tu archivo principal se llama app.py y la instancia de Flask se llama app.
 # Ajusta "workers" según los cores de tu CPU (usualmente 2 * cores + 1).
-CMD ["gunicorn", "--bind", "0.0.0.0:5000", "--workers", "3", "--timeout", "120", "app:app"]
+CMD ["gunicorn", "--bind", "0.0.0.0:5000", "--workers", "3", "--timeout", "120", "run:app"]
