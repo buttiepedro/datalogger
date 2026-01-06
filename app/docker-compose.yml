@@ -1,10 +1,6 @@
 services:
-  # ======================
-  # PostgreSQL
-  # ======================
   db:
     image: postgres:15-alpine
-    container_name: datalog_db_prod
     restart: always
     environment:
       POSTGRES_DB: ${DB_NAME}
@@ -12,19 +8,12 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
     volumes:
       - pgdata:/var/lib/postgresql/data
-    # En producción NO exponemos la base de datos al exterior (sin puerto 5432:5432)
-    # Solo la API podrá verla internamente.
 
-  # ======================
-  # API (Flask + Gunicorn)
-  # ======================
   api:
     build:
       context: ./api
       dockerfile: Dockerfile
-    container_name: datalog_api_prod
     restart: always
-    # Eliminamos la línea env_file: - ./api/.env.prod
     environment:
       - PYTHONPATH=/app
       - DB_NAME=${DB_NAME}
@@ -38,22 +27,14 @@ services:
              gunicorn --bind 0.0.0.0:5000 --workers 3 app:app"
     depends_on:
       - db
-    expose:
-      - "5000"
 
-  # ======================
-  # Front (Nginx)
-  # ======================
   front:
     build:
       context: ./front
-      dockerfile: Dockerfile # El que usa multi-stage build
-    container_name: datalog_front_prod
+      dockerfile: Dockerfile.prod
     restart: always
-    ports:
-      - "80:80"  # El tráfico web entra por aquí
     depends_on:
       - api
-
+      
 volumes:
   pgdata:
