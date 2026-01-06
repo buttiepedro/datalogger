@@ -21,15 +21,16 @@ services:
   api:
     build:
       context: ./api
-      dockerfile: Dockerfile  # El que creamos con Gunicorn y slim
+      dockerfile: Dockerfile
     container_name: datalog_api_prod
     restart: always
-    env_file:
-      - ./api/.env.prod
+    # Eliminamos la línea env_file: - ./api/.env.prod
     environment:
       - PYTHONPATH=/app
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
       - DATABASE_URL=postgresql://${DB_USER}:${DB_PASSWORD}@db:5432/${DB_NAME}
-    # Ejecutamos migraciones/seeds y luego el servidor de producción
     command: >
       sh -c "python wait_for_db.py && 
              python seed_script.py && 
@@ -46,7 +47,7 @@ services:
   front:
     build:
       context: ./front
-      dockerfile: Dockerfile.prod # El que usa multi-stage build
+      dockerfile: Dockerfile # El que usa multi-stage build
     container_name: datalog_front_prod
     restart: always
     ports:
