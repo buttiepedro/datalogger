@@ -31,7 +31,7 @@ services:
   front:
     build:
       context: ./front
-      dockerfile: Dockerfile.prod
+      dockerfile: Dockerfile
     restart: always
     depends_on:
       - api
