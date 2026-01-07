@@ -4,6 +4,7 @@ import { useContext } from 'react'
 import { AuthContext } from "../context/AuthContext";
 import FormDatalogger from "../components/FormDatalogger.jsx"
 import TablaDataloggers from "../components/TablaDataloggers.jsx";
+import Pagination from "../components/Pagination.jsx";
 
 export default function Dataloggers() {
   const { user } = useContext(AuthContext);
@@ -12,11 +13,18 @@ export default function Dataloggers() {
   const [error, setError] = useState(null)
   const [sensores, setSensores] = useState([])
   const [showForm, setShowForm] = useState(false)
+  const [dataloggersPagination, setDataloggersPagination] = useState({
+    total_items: 0,
+    total_pages: 0,
+    current_page: 1,
+    per_page: 5
+  })
 
   useEffect(() => {
-    api.get("/dataloggers/")
+    api.get(`/dataloggers/?page=${dataloggersPagination.current_page}&per_page=${dataloggersPagination.per_page}`)
       .then(res => {
-        setDataloggers(res.data)
+        setDataloggers(res.data.dataloggers)
+        setDataloggersPagination(res.data.pagination)
       })
       .catch(err => {
         console.error(err)
@@ -25,7 +33,7 @@ export default function Dataloggers() {
       .finally(() => {
         setLoading(false)
       })
-  }, [dataloggers.length])
+  }, [dataloggers.length, dataloggersPagination.current_page])
 
   useEffect(() => {
     api.get("/sensores/")
@@ -75,6 +83,13 @@ export default function Dataloggers() {
       })
   }
 
+  const handlePageChange = (newPage) => {
+    setDataloggersPagination((prev) => ({
+      ...prev,
+      current_page: newPage,
+    }));
+  }
+
   if (loading) return <p>Cargando...</p>
   if (error) return <p className="text-red-600">{error}</p>
 
@@ -98,6 +113,13 @@ export default function Dataloggers() {
         </button>
       </div>
       <TablaDataloggers dataloggers={dataloggers} error={error} loading={loading} sensores={sensores} onEliminar={elminiarDatalogger}></TablaDataloggers>
+      <Pagination
+        currentPage={dataloggersPagination.current_page}
+        totalPages={dataloggersPagination.total_pages}
+        totalItems={dataloggersPagination.total_items}
+        esEmpresa={false}
+        onPageChange={handlePageChange}
+      />
       <FormDatalogger
         superUsuario={user}
         showForm={showForm}

@@ -5,6 +5,7 @@ import api from '../services/api';
 import MiPieChart from '../components/graficos/MiPieChart.jsx';
 import MiGrafico from '../components/graficos/MiGrafico.jsx';
 import TablaSensores from '../components/TablaSensores.jsx';
+import Pagination from '../components/Pagination.jsx';
 
 
 export default function DataloggerById() {
@@ -12,21 +13,28 @@ export default function DataloggerById() {
   const [datalogger, setDatalogger] = useState()
   const [sensor, setSensor] = useState()
   const [numero_de_serie, setNumero_de_serie] = useState()
+  const [sensoresPagination, setSensoresPagination] = useState({
+    current_page: 1,
+    total_items: 0,
+    total_pages: 0,
+    per_page: 5
+  })
   const [selectedSensor, setSelectedSensor] = useState();
   const navigate = useNavigate();
   const { id_datalogger } = useParams();
 
   useEffect(() => {
-  api.get(`/sensores/${id_datalogger}`)
+  api.get(`/sensores/${id_datalogger}?page=${sensoresPagination.current_page}&per_page=${sensoresPagination.per_page}`)
     .then(res => {
-      setDatalogger(res.data);
+      setDatalogger(res.data.sensores);
       // This will trigger the second useEffect once state updates
-      setSelectedSensor(res.data?.[0]); 
+      setSelectedSensor(res.data.sensores[0]); 
+      setSensoresPagination(res.data.pagination);
     })
     .catch(err => {
       alert("Error cargando datalogger");
     });
-}, [id_datalogger]); // Only runs when datalogger ID changes
+}, [id_datalogger, sensoresPagination.current_page]); // Only runs when datalogger ID changes
 
   useEffect(() => {
   // Only fetch if selectedSensor actually exists
@@ -35,7 +43,12 @@ export default function DataloggerById() {
   }
 }, [selectedSensor]); // Runs whenever selectedSensor is set or changed
 
-
+const handlePageChange = (newPage) => {
+  setSensoresPagination((prev) => ({
+    ...prev,
+    current_page: newPage,
+  }));
+}
 
   const getMediciones = () => {
     api.get(`/mediciones/sensor/${datalogger?.[0]?.datalogger?.numero_de_serie}/${selectedSensor.sensor_id}`)
@@ -101,6 +114,13 @@ export default function DataloggerById() {
         </span>
         <h3 className="text-2xl font-bold tracking-tight text-sky-900 mt-6">Sensores Asociados:</h3>  
         {datalogger ? <TablaSensores sensores={datalogger} selectedSensor={selectedSensor} setSelectedSensor={setSelectedSensor} /> : <p>Cargando sensores...</p>}
+        <Pagination
+          currentPage={sensoresPagination.current_page}
+          totalPages={sensoresPagination.total_pages}
+          totalItems={sensoresPagination.total_items}
+          esEmpresa={false}
+          onPageChange={handlePageChange}
+        />
       </div>
     </div>
   )

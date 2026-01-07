@@ -1,3 +1,4 @@
+from math import ceil
 from flask import Blueprint, request, jsonify
 from ..database import db
 from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
@@ -29,8 +30,23 @@ def get_sensores():
 def get_sensores_por_datalogger(id_datalogger):
   claims = get_jwt()
   # Si es superusuario, devuelve todos los sensores del datalogger 
+  # 1. Recibir parámetros
+  page = int(request.args.get('page', 1))
+  per_page = int(request.args.get('per_page', 5))
+
+  # 2. Calcular offset y limit
+  offset = (page - 1) * per_page
+  limit = per_page
+
+  usuario_logeado_id = get_jwt_identity()
+  # Paginacion
+
+
   if claims.get("is_superuser"):
-    sensores = Sensores.query.filter_by(id_datalogger=id_datalogger).all()
+    total_items = Sensores.query.filter_by(id_datalogger=id_datalogger).count()
+    total_pages = ceil(total_items / per_page)
+    sensores = Sensores.query.filter_by(id_datalogger=id_datalogger).offset(offset).limit(limit).all()
+
     resultado = []
     for s in sensores:
       sensor_dict = s.to_dict()
@@ -40,13 +56,25 @@ def get_sensores_por_datalogger(id_datalogger):
       ).order_by(Mediciones.hora.desc()).first()
       sensor_dict["ultima_medicion"] = ultima_medicion.to_dict() if ultima_medicion else None
       resultado.append(sensor_dict)
-    return jsonify(resultado), 200
+    return jsonify({
+      "sensores": resultado,
+      'pagination': {
+        'total_items': total_items,
+        'total_pages': total_pages,
+        'current_page': page,
+        'per_page': per_page
+      }})
   
   empresa=claims["id_empresa"]
+  total_items = Sensores.query.join(Dataloggers).filter(
+    Dataloggers.id_empresa==empresa,
+    Sensores.id_datalogger==id_datalogger
+  ).count()
+  total_pages = ceil(total_items / per_page)
   sensores = Sensores.query.join(Dataloggers).filter(
     Dataloggers.id_empresa==empresa,
     Sensores.id_datalogger==id_datalogger
-  ).all()
+  ).offset(offset).limit(limit).all()
   resultado = []
   for s in sensores:
     sensor_dict = s.to_dict()
@@ -56,7 +84,14 @@ def get_sensores_por_datalogger(id_datalogger):
     ).order_by(Mediciones.hora.desc()).first()
     sensor_dict["ultima_medicion"] = ultima_medicion.to_dict() if ultima_medicion else None
     resultado.append(sensor_dict)
-  return jsonify(resultado), 200
+  return jsonify({
+    "sensores": resultado,  
+    'pagination': {
+      'total_items': total_items,
+      'total_pages': total_pages,
+      'current_page': page,
+      'per_page': per_page
+    }})
 
 # @sensores_bp.get("/<int:sensor_id>")
 # @jwt_required()

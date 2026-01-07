@@ -1,3 +1,4 @@
+from math import ceil
 from flask import Blueprint, request, jsonify
 from ..database import db
 from ..models import Dataloggers
@@ -13,12 +14,44 @@ def check_jwt():
 @dataloggers_bp.get("/")
 def get_dataloggers():
     claims = get_jwt()
+    # 1. Recibir parámetros
+    page = int(request.args.get('page', 1))
+    per_page = int(request.args.get('per_page', 5))
+
+    # 2. Calcular offset y limit
+    offset = (page - 1) * per_page
+    limit = per_page
+
     if claims.get("is_superuser"):
-        dataloggers = Dataloggers.query.all()
-        return jsonify([d.to_dict() for d in dataloggers]), 200
+        total_items = Dataloggers.query.count()
+        total_pages = ceil(total_items / per_page)
+        dataloggers = Dataloggers.query.offset(offset).limit(limit).all()
+        pagination = {
+            'total_items': total_items,
+            'total_pages': total_pages,
+            'current_page': page,
+            'per_page': per_page
+        }
+
+        return jsonify({
+            "dataloggers": [d.to_dict() for d in dataloggers], 
+            'pagination': pagination
+        }), 200
+    
     empresa=claims["id_empresa"]
-    dataloggers = Dataloggers.query.filter_by(id_empresa=empresa).all()
-    return jsonify([d.to_dict() for d in dataloggers]), 200
+    total_items = Dataloggers.query.filter_by(id_empresa=empresa).count()
+    total_pages = ceil(total_items / per_page)
+    dataloggers = Dataloggers.query.filter_by(id_empresa=empresa).offset(offset).limit(limit).all()
+    pagination = {
+        'total_items': total_items,
+        'total_pages': total_pages,
+        'current_page': page,
+        'per_page': per_page
+    }
+    return jsonify({
+        "dataloggers": [d.to_dict() for d in dataloggers], 
+        'pagination': pagination
+    }), 200
 
 
 # @sensores_bp.get("/<int:sensor_id>")
