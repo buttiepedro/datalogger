@@ -70,7 +70,6 @@ export default function Dashboard() {
         // asignacion de datos para paginacion
         setUsuarios(res.data.usuarios)
         setUsuariosPagination(res.data.pagination)
-        console.log(res.data)
       }
       )
       .catch((err) => {
@@ -113,7 +112,6 @@ useEffect(() => {
         })
       })
       .catch((err) => {
-        console.error(err)
         setErrorCrearUsuario(err.response.data)
       })
   }
@@ -122,7 +120,7 @@ useEffect(() => {
     e.preventDefault()
     const form = e.target
     const nuevaEmpresa = {
-      nombre: form.nombre.value,
+      nombre: form.nombre_empresa.value,
       direccion: form.direccion.value,
     }
     api.post("/empresas/", nuevaEmpresa)
@@ -132,7 +130,6 @@ useEffect(() => {
         handleShowFormEmpresas()
       })
       .catch((err) => {
-        console.error(err)
         alert("Error creando empresa")
       })  
   }
@@ -147,7 +144,6 @@ useEffect(() => {
         setUsuarios(usuarios.filter(u => u.id !== id))
       })
       .catch(err => {
-        console.error(err)
         alert("Error eliminando usuario")
       })
   }
@@ -162,7 +158,6 @@ useEffect(() => {
         setEmpresas(empresas.filter(e => e.id !== id))
       })
       .catch(err => {
-        console.error(err)
         alert("Error eliminando empresa")
       })
   }
@@ -182,7 +177,6 @@ useEffect(() => {
   }
 
   const handleShowFormUsuarios = () => {
-    console.log("click", showFormUsuarios)
     setShowFormUsuarios(!showFormUsuarios)
     //desactivar scroll de fondo
     window.scrollTo(0,0)

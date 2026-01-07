@@ -66,9 +66,9 @@ export default function Unidades() {
       </div>
       <div className="form-check mb-3">
         <input className="form-check-input" type="checkbox" id="booleana" name="booleana"/>
-        <label className="" for="booleana">Booleana</label>
+        <label className="" htmlFor="booleana">Booleana</label>
       </div>
-      <button class="px-6 py-2 bg-blue-900 text-white rounded-md" type="submit">Crear Unidad</button>
+      <button className="px-6 py-2 bg-blue-900 text-white rounded-md" type="submit">Crear Unidad</button>
     </form>
     <div className="mt-8">
       <h2>Lista de Unidades</h2>

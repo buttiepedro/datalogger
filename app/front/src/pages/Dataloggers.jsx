@@ -58,14 +58,21 @@ export default function Dataloggers() {
       setDataloggers([...dataloggers, res.data])
       form.reset()
       setShowForm(false)
-      setErrorCrear({
-        error: null, 
-        state: false,
-      })
+      setError(null)
     })
     .catch(err => {
       setError("Error creando datalogger")
     })
+  }
+
+  const elminiarDatalogger = (id_datalogger) => {
+    api.delete(`/dataloggers/${id_datalogger}`)
+      .then(res => {
+        setDataloggers(dataloggers.filter(d => d.id !== id_datalogger))
+      })
+      .catch(err => {
+        setError("Error eliminando datalogger")
+      })
   }
 
   if (loading) return <p>Cargando...</p>
@@ -90,17 +97,7 @@ export default function Dataloggers() {
           </svg>
         </button>
       </div>
-      <TablaDataloggers dataloggers={dataloggers} error={error} loading={loading} sensores={sensores} onEliminar={() => {}}></TablaDataloggers>
-      {/* <ul className="space-y-2">
-        {dataloggers.map(datalogger => (
-          <li key={datalogger.id} className="border p-4 rounded shadow">
-            <h2 className="text-2xl font-semibold">{datalogger.nombre}</h2>
-            <p>Ubicación: {datalogger.ubicacion}</p>
-            <p>Número de Serie: {datalogger.numero_de_serie}</p>
-            { user.isSuperuser && <p>Empresa: {datalogger.empresa}</p> }
-          </li>
-        ))}
-      </ul> */}
+      <TablaDataloggers dataloggers={dataloggers} error={error} loading={loading} sensores={sensores} onEliminar={elminiarDatalogger}></TablaDataloggers>
       <FormDatalogger
         superUsuario={user}
         showForm={showForm}

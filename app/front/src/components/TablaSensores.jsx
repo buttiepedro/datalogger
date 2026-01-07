@@ -4,7 +4,6 @@ import { AuthContext } from "../context/AuthContext";
   
 export default function TablaSensores({ sensores, error, loading, selectedSensor, setSelectedSensor }) {
   const { user } = useContext(AuthContext);
-  // const [sensoresData, setSensoresData] = useState(sensores);
   
   const handleRowClick = (sensor) => {
     setSelectedSensor(sensor);

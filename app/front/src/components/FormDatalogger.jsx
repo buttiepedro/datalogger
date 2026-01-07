@@ -11,8 +11,8 @@ export default function FormDatalogger({ onSubmit , superUsuario, showForm, setS
   }
 
   return (
-    <div class={`${showForm ? 'flex' : 'hidden'} absolute top-0 left-0 items-center justify-center p-12 w-screen h-screen bg-gray-900/50`}>
-      <div class="mx-auto w-full max-w-[550px] bg-white p-8 rounded-lg shadow-lg">
+    <div className={`${showForm ? 'flex' : 'hidden'} absolute top-0 left-0 items-center justify-center p-12 w-screen h-screen bg-gray-900/50`}>
+      <div className="mx-auto w-full max-w-[550px] bg-white p-8 rounded-lg shadow-lg">
         <form onSubmit={onSubmit} className="relative z-20">
           <div className="absolute right-0">
             <button onClick={() => (resetForm(), setShowForm(!showForm), document.body.style.overflow = showForm ? "auto" : "hidden")} id="close-button" type="button" className="text-gray-400 hover:text-gray-600">
@@ -21,10 +21,10 @@ export default function FormDatalogger({ onSubmit , superUsuario, showForm, setS
               </svg>
             </button>
           </div>
-          <div class="mb-5">
+          <div className="mb-5">
             <label
-              for="nombre"
-              class="mb-3 block text-base font-medium text-[#07074D]"
+              htmlFor="nombre"
+              className="mb-3 block text-base font-medium text-[#07074D]"
             >
               Nombre
             </label>
@@ -34,13 +34,13 @@ export default function FormDatalogger({ onSubmit , superUsuario, showForm, setS
               id="nombre"
               required
               placeholder="Nombre referencia del Datalogger"
-              class="focus:invalid:border-red-500 w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-blue-900 focus:shadow-md"
+              className="focus:invalid:border-red-500 w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-blue-900 focus:shadow-md"
             />
           </div>
-          <div class="mb-5 flex flex-col">
+          <div className="mb-5 flex flex-col">
             <label
-              for="email"
-              class="mb-3 block text-base font-medium text-[#07074D]"
+              htmlFor="ubicacion"
+              className="mb-3 block text-base font-medium text-[#07074D]"
             >
               Ubicacion
               {/* {error.state === true && <span class="text-red-500 text-xs flex animate-shake animate-once">{error.error}</span>} */}
@@ -52,13 +52,13 @@ export default function FormDatalogger({ onSubmit , superUsuario, showForm, setS
               required
               onClick={handleSetErrorState}
               placeholder="Ubicación del datalogger"
-              class={`${ error.state ? 'border-red-500 ' : 'border-[#e0e0e0] '} focus:invalid:border-red-500 w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-blue-900 focus:shadow-md`}
+              className={`${ error.state ? 'border-red-500 ' : 'border-[#e0e0e0] '} focus:invalid:border-red-500 w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-blue-900 focus:shadow-md`}
             />
           </div>
-          <div class="mb-5">
+          <div className="mb-5">
             <label
-              for="subject"
-              class="mb-3 block text-base font-medium text-[#07074D]"
+              htmlFor="numero_de_serie"
+              className="mb-3 block text-base font-medium text-[#07074D]"
             >
               Numero de Serie
             </label>
@@ -68,7 +68,7 @@ export default function FormDatalogger({ onSubmit , superUsuario, showForm, setS
               id="numero_de_serie"
               placeholder="Ingrese su número de serie"
               required
-              class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-blue-900 focus:shadow-md"
+              className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-blue-900 focus:shadow-md"
             />
           </div>
           <div>

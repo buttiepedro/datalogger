@@ -1,7 +1,6 @@
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, ReferenceLine, Label } from 'recharts';
 
 export default function GraficoPrueba({datos, max, min, mediciones}) {
-  console.log("mediciones en MiGrafico:", mediciones);
   return (
     // Usamos Tailwind para dar estilo al contenedor (fondo, bordes, sombra)
     <div className="p-4  rounded-xl  w-full h-80">

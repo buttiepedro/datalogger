@@ -11,8 +11,8 @@ export default function FormUsuarios({empresas, onSubmit , superUsuario, showFor
   }
 
   return (
-    <div class={`${showForm ? 'flex' : 'hidden'} absolute top-0 left-0 items-center justify-center p-12 w-screen h-screen bg-gray-900/50`}>
-      <div class="mx-auto w-full max-w-[550px] bg-white p-8 rounded-lg shadow-lg">
+    <div className={`${showForm ? 'flex' : 'hidden'} absolute top-0 left-0 items-center justify-center p-12 w-screen h-screen bg-gray-900/50`}>
+      <div className="mx-auto w-full max-w-[550px] bg-white p-8 rounded-lg shadow-lg">
         <form onSubmit={onSubmit} className="relative z-20">
           <div className="absolute right-0">
             <button onClick={() => (resetForm(), setShowForm(!showForm), document.body.style.overflow = showForm ? "auto" : "hidden")} id="close-button" type="button" className="text-gray-400 hover:text-gray-600">
@@ -21,10 +21,10 @@ export default function FormUsuarios({empresas, onSubmit , superUsuario, showFor
               </svg>
             </button>
           </div>
-          <div class="mb-5">
+          <div className="mb-5">
             <label
-              for="nombre"
-              class="mb-3 block text-base font-medium text-[#07074D]"
+              htmlFor="nombre"
+              className="mb-3 block text-base font-medium text-[#07074D]"
             >
               Nombre
             </label>
@@ -34,16 +34,16 @@ export default function FormUsuarios({empresas, onSubmit , superUsuario, showFor
               id="nombre"
               required
               placeholder="nombre completo"
-              class="focus:invalid:border-red-500 w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-blue-900 focus:shadow-md"
+              className="focus:invalid:border-red-500 w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-blue-900 focus:shadow-md"
             />
           </div>
-          <div class="mb-5 flex flex-col">
+          <div className="mb-5 flex flex-col">
             <label
-              for="email"
-              class="mb-3 block text-base font-medium text-[#07074D]"
+              htmlFor="email"
+              className="mb-3 block text-base font-medium text-[#07074D]"
             >
               Email
-              {error.state === true && <span class="text-red-500 text-xs flex animate-shake animate-once">{error.error}</span>}
+              {error.state === true && <span className="text-red-500 text-xs flex animate-shake animate-once">{error.error}</span>}
             </label>
             <input
               type="email"
@@ -52,13 +52,13 @@ export default function FormUsuarios({empresas, onSubmit , superUsuario, showFor
               required
               onClick={handleSetErrorState}
               placeholder="ejemplo@ejemplo.com"
-              class={`${ error.state ? 'border-red-500 ' : 'border-[#e0e0e0] '} focus:invalid:border-red-500 w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-blue-900 focus:shadow-md`}
+              className={`${ error.state ? 'border-red-500 ' : 'border-[#e0e0e0] '} focus:invalid:border-red-500 w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-blue-900 focus:shadow-md`}
             />
           </div>
-          <div class="mb-5">
+          <div className="mb-5">
             <label
-              for="subject"
-              class="mb-3 block text-base font-medium text-[#07074D]"
+              htmlFor="subject"
+              className="mb-3 block text-base font-medium text-[#07074D]"
             >
               Contrseña
             </label>
@@ -68,23 +68,23 @@ export default function FormUsuarios({empresas, onSubmit , superUsuario, showFor
               id="password"
               placeholder="Ingrese su contraseña"
               required
-              class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-blue-900 focus:shadow-md"
+              className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-blue-900 focus:shadow-md"
             />
           </div>
           {superUsuario.isSuperuser === false ?
             ''
             :
-            <div class="mb-5">
+            <div className="mb-5">
               <label
-                for="empresa"
-                class="mb-3 block text-base font-medium text-[#07074D]"
+                htmlFor="empresa"
+                className="mb-3 block text-base font-medium text-[#07074D]"
               >
                 Empresa
               </label>
               <select
                 name="empresa"
                 id="empresa"
-                class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-blue-900 focus:shadow-md"
+                className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-blue-900 focus:shadow-md"
               >
                 {empresas.map(e => (
                   <option key={e.id} value={e.id}>{e.nombre}</option>
@@ -92,10 +92,10 @@ export default function FormUsuarios({empresas, onSubmit , superUsuario, showFor
               </select>
             </div>
           }
-          <div class="mb-5">
-            <label class="inline-flex items-center">
-              <span class="mr-3 text-base font-medium text-[#07074D]">Es admin?</span>
-              <input type="checkbox" id="is_admin" class="h-5 w-5 rounded border-gray-300 text-blue-900 focus:ring-blue-900"/>
+          <div className="mb-5">
+            <label className="inline-flex items-center">
+              <span className="mr-3 text-base font-medium text-[#07074D]">Es admin?</span>
+              <input type="checkbox" id="is_admin" className="h-5 w-5 rounded border-gray-300 text-blue-900 focus:ring-blue-900"/>
             </label>
           </div>
           <div>

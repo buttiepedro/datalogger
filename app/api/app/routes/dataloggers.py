@@ -11,7 +11,7 @@ def check_jwt():
   pass
 
 @dataloggers_bp.get("/")
-def get_sensores():
+def get_dataloggers():
     claims = get_jwt()
     if claims.get("is_superuser"):
         dataloggers = Dataloggers.query.all()
@@ -38,7 +38,7 @@ def get_sensores():
 
 @dataloggers_bp.post("/")
 @admin_required
-def add_sensor():
+def add_datalogger():
     claims = get_jwt()
     empresa=claims["id_empresa"]
     data = request.json
@@ -50,15 +50,15 @@ def add_sensor():
     )
     db.session.add(s)
     db.session.commit()
-    return jsonify({"msg": "Sensor creado", "id": s.id})
+    return jsonify({"msg": "Datalogger creado", "id": s.id}) , 201
 
 
-@dataloggers_bp.delete("/<int:sensor_id>")
+@dataloggers_bp.delete("/<int:datalogger_id>")
 @admin_required
-def delete_sensor(sensor_id):
-    s = Dataloggers.query.get(sensor_id)
+def delete_datalogger(datalogger_id):
+    s = Dataloggers.query.get(datalogger_id)
     if not s:
         return jsonify({"error": "No existe"}), 404
     db.session.delete(s)
     db.session.commit()
-    return jsonify({"msg": "Sensor eliminado"})
+    return jsonify({"msg": "Datalogger eliminado"})

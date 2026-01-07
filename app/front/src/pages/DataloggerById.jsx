@@ -24,7 +24,6 @@ export default function DataloggerById() {
       setSelectedSensor(res.data?.[0]); 
     })
     .catch(err => {
-      console.error(err);
       alert("Error cargando datalogger");
     });
 }, [id_datalogger]); // Only runs when datalogger ID changes
@@ -44,7 +43,6 @@ export default function DataloggerById() {
       setSensor(res.data)
     })
     .catch(err => {
-      console.error(err)
       alert("Error cargando sensor")
     })
   }
@@ -82,13 +80,12 @@ export default function DataloggerById() {
     return formateada;
   }
 
-  console.log("Selected Sensor:", selectedSensor);
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
       <button
         onClick={() => navigate(-1)}
-        class="ml-8 flex items-center text-base font-semibold text-gray-500 outline-none hover:text-gray-900"
+        className="ml-8 flex items-center text-base font-semibold text-gray-500 outline-none hover:text-gray-900"
         >
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
           <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />

@@ -72,16 +72,16 @@ export default function TipoSensores() {
       Tipos de Sensores
     </h1>
     <form id="form-tipo-sensor" onSubmit={crearTipoSensor}>
-      <div class="mb-3">
-        <label class="form-label">Nombre</label>
-        <input name="nombre" class="form-control" required/>
+      <div className="mb-3">
+        <label className="form-label">Nombre</label>
+        <input name="nombre" className="form-control" required/>
       </div>
-      <div class="mb-3">
-        <label class="form-label">Descripción</label>
-        <input name="descripcion" class="form-control"/>
+      <div className="mb-3">
+        <label className="form-label">Descripción</label>
+        <input name="descripcion" className="form-control"/>
       </div>
-      <div class="mb-3">
-        <label class="form-label">Unidad </label>
+      <div className="mb-3">
+        <label className="form-label">Unidad </label>
         <select name="unidad_id" id="">
           <option value="">Seleccione una unidad</option>
           {unidades.map(unidad => (
@@ -89,15 +89,15 @@ export default function TipoSensores() {
           ))}
         </select>
       </div>
-      <div class="mb-3">
-        <label class="form-label">Medición min</label>
-        <input name="medicion_min" type="number" step="any" class="form-control"/>
+      <div className="mb-3">
+        <label className="form-label">Medición min</label>
+        <input name="medicion_min" type="number" step="any" className="form-control"/>
       </div>
-      <div class="mb-3">
-        <label class="form-label">Medición max</label>
-        <input name="medicion_max" type="number" step="any" class="form-control"/>
+      <div className="mb-3">
+        <label className="form-label">Medición max</label>
+        <input name="medicion_max" type="number" step="any" className="form-control"/>
       </div>
-      <button class="px-6 py-2 bg-blue-900 text-white rounded-md" type="submit">Crear Tipo</button>
+      <button className="px-6 py-2 bg-blue-900 text-white rounded-md" type="submit">Crear Tipo</button>
     </form>
     <div className="mt-8">
       <h2>Lista de Tipos de Sensores</h2>

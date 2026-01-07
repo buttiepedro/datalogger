@@ -22,20 +22,20 @@ export default function Header() {
   }
 
   return (
-  <nav class="relative bg-blue-900 after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:h-px after:bg-white/10">
-  <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
-    <div class="relative flex h-16 items-center justify-between">
-      <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
+  <nav className="relative bg-blue-900 after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:h-px after:bg-white/10">
+  <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+    <div className="relative flex h-16 items-center justify-between">
+      <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
         <BugerBtn track_menu="mobile-menu"/>
       </div>
-      <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
-        <div class="flex shrink-0 items-center">
+      <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
+        <div className="flex shrink-0 items-center">
           <NavLink to="/dashboard">
-            <img src="https://bitautomatizacion.com.ar/wp-content/uploads/2025/12/cropped-Copy-of-LOGOPNG.png" alt="Your Company" class="h-8 w-auto" />
+            <img src="https://bitautomatizacion.com.ar/wp-content/uploads/2025/12/cropped-Copy-of-LOGOPNG.png" alt="Your Company" className="h-8 w-auto" />
           </NavLink>
         </div>
-        <div class="hidden sm:ml-6 sm:block">
-          <div class="flex space-x-4">
+        <div className="hidden sm:ml-6 sm:block">
+          <div className="flex space-x-4">
             <span className={location.pathname === "/dashboard" ? tabActivo : tanInactivo}>
               <NavLink to="/dashboard" aria-current="page">Dashboard</NavLink>
             </span>
@@ -67,29 +67,29 @@ export default function Header() {
             </svg>
           </button>
 
-          <el-menu anchor="bottom end" popover className="w-48 origin-top-right mt-4 rounded-b-md bg-blue-900 py-1  transition transition-discrete [--anchor-gap:--spacing(1.5)] data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in">
-            <p onClick={cerrarSesion} class="block px-4 py-2 text-sm text-gray-300 hover:bg-white/5 cursor-pointer">Cerrar sesion</p>
+          <el-menu anchor="bottom end" popover="auto" className="w-48 origin-top-right mt-4 rounded-b-md bg-blue-900 py-1  transition transition-discrete [--anchor-gap:--spacing(1.5)] data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in">
+            <p onClick={cerrarSesion} className="block px-4 py-2 text-sm text-gray-300 hover:bg-white/5 cursor-pointer">Cerrar sesion</p>
           </el-menu>
         </el-dropdown>
       </div>
     </div>
   </div>
 
-  <el-disclosure id="mobile-menu" hidden class="absolute block sm:hidden w-48 origin-top-right rounded-br-md outline-none bg-blue-900 py-1 transition transition-discrete [--anchor-gap:--spacing(2)] data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in">
-    <el-menu  class="space-y- pt-2 pb-3">
-      <span class="block px-4 py-2 text-sm text-gray-300 hover:bg-white/5 cursor-pointer">
+  <el-disclosure id="mobile-menu" hidden className="absolute block sm:hidden w-48 origin-top-right rounded-br-md outline-none bg-blue-900 py-1 transition transition-discrete [--anchor-gap:--spacing(2)] data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in">
+    <el-dropdown  className="space-y- pt-2 pb-3 z-20">
+      <button className="w-48 px-4 py-2 text-sm text-gray-300 hover:bg-white/5 cursor-pointer text-left">
         <NavLink to="/tipos-de-sensores" aria-current="page" >Tipos de sensor</NavLink>
-      </span>
-      <span class="block px-4 py-2 text-sm text-gray-300 hover:bg-white/5 cursor-pointer">
+      </button>
+      <button className="w-48 px-4 py-2 text-sm text-gray-300 hover:bg-white/5 cursor-pointer text-left">
         <NavLink to="/unidades" >Unidades</NavLink>
-      </span>
-      <span class="block px-4 py-2 text-sm text-gray-300 hover:bg-white/5 cursor-pointer">
+      </button>
+      <button className="w-48 px-4 py-2 text-sm text-gray-300 hover:bg-white/5 cursor-pointer text-left">
         <NavLink to="/mediciones" >Mediciones</NavLink>
-      </span>
-      <span class="block px-4 py-2 text-sm text-gray-300 hover:bg-white/5 cursor-pointer">
+      </button>
+      <button className="w-48 px-4 py-2 text-sm text-gray-300 hover:bg-white/5 cursor-pointer text-left">
         <NavLink to="/dataloggers" >Dataloggers</NavLink>
-      </span>
-    </el-menu>
+      </button>
+    </el-dropdown>
   </el-disclosure>
 </nav>
   )
