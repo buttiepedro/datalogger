@@ -93,20 +93,17 @@ def get_sensores_por_datalogger(id_datalogger):
       'per_page': per_page
     }})
 
-# @sensores_bp.get("/<int:sensor_id>")
-# @jwt_required()
-# def get_sensor(sensor_id):
-#     s = Sensores.query.get(sensor_id)
-#     if not s:
-#         return jsonify({"error": "No existe"}), 404
+@sensores_bp.delete("/<int:sensor_id>")
+@jwt_required()
+def get_sensor(sensor_id):
+  s = Sensores.query.get(sensor_id)
+  if not s:
+    return jsonify({"error": "No existe"}), 404
 
-#     return jsonify({
-#         "id": s.id,
-#         "id_empresa": s.id_empresa,
-#         "nombre": s.nombre,
-#         "ubicacion": s.ubicacion,
-#         "tipo_id": s.tipo_id
-#     }), 200
+  db.session.delete(s)
+  db.session.commit()
+  return jsonify({"message": "Sensor eliminado"}), 200
+
 
 @sensores_bp.post("/")
 @admin_required

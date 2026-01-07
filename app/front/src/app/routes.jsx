@@ -15,6 +15,7 @@ export default function AppRoutes() {
   return (
     <Routes>
       <Route path="*" element={<Error404 />} />
+      <Route path="/" element={<Login />} />
       <Route path="/login" element={<Login />} />
 
       <Route element={<MainLayout />}>

@@ -6,6 +6,7 @@ import MiPieChart from '../components/graficos/MiPieChart.jsx';
 import MiGrafico from '../components/graficos/MiGrafico.jsx';
 import TablaSensores from '../components/TablaSensores.jsx';
 import Pagination from '../components/Pagination.jsx';
+import FormSensor from '../components/FormSensor.jsx';
 
 
 export default function DataloggerById() {
@@ -22,6 +23,7 @@ export default function DataloggerById() {
   const [selectedSensor, setSelectedSensor] = useState();
   const navigate = useNavigate();
   const { id_datalogger } = useParams();
+  const [showForm, setShowForm] = useState(false)
 
   useEffect(() => {
   api.get(`/sensores/${id_datalogger}?page=${sensoresPagination.current_page}&per_page=${sensoresPagination.per_page}`)
@@ -93,6 +95,47 @@ const handlePageChange = (newPage) => {
     return formateada;
   }
 
+  const handleShowForm = (e) => {
+    window.scrollTo(0,0)
+    setShowForm(!showForm)
+    //desactivar scroll de fondo
+    document.body.style.overflow = showForm ? "auto" : "hidden";
+  }
+
+  const crearSensor = (e) => {
+    e.preventDefault()
+    const form = e.target
+    const nuevoSensor = {
+      sensor_id: form.sensor_id.value,
+      id_datalogger: id_datalogger,
+      tipo_sensor: form.tipo_sensor.value,
+    }
+    api.post("/sensores/", nuevoSensor)
+      .then((res) => {
+        setDatalogger([...datalogger, res.data])
+        form.reset()
+        setShowForm(false)
+        document.body.style.overflow = showForm ? "auto" : "hidden";
+      })
+      .catch((err) => {
+        alert("Error creando sensor")
+      })
+  }
+
+  const eliminarSensor = (id_sensor) => {
+    const confirmacion = window.confirm("¿Estás seguro de que quieres eliminar este sensor? Esta acción no se puede deshacer.");
+    if (!confirmacion) {
+      return; // Si el usuario no confirma, salir de la función
+    }
+    api.delete(`/sensores/${id_sensor}`)
+      .then(() => {
+        setDatalogger(datalogger.filter(s => s.id !== id_sensor))
+      })
+      .catch(err => {
+        alert("Error eliminando sensor")
+      })
+  }
+
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
@@ -108,12 +151,20 @@ const handlePageChange = (newPage) => {
         <h2 className="text-3xl font-bold tracking-tight text-sky-950">Nombre: {datalogger?.[0]?.datalogger?.nombre}</h2>
         <p className="text-lg font-medium text-sky-800">Ubicación: {datalogger?.[0]?.datalogger?.ubicacion}</p>
         <p className="text-lg font-medium text-sky-800">Número de Serie: {datalogger?.[0]?.datalogger?.numero_de_serie}</p>
+        <button
+          onClick={handleShowForm}
+          className="mb-4 mx-2 rounded-md bg-blue-900 py-2 px-4 text-base font-semibold text-white hover:bg-blue-800 "
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75" />
+          </svg>
+        </button>
         <span className='flex'>
           <MiPieChart datos={datalogger}/>
           <MiGrafico mediciones={graficoSensor(sensor)}/>
         </span>
         <h3 className="text-2xl font-bold tracking-tight text-sky-900 mt-6">Sensores Asociados:</h3>  
-        {datalogger ? <TablaSensores sensores={datalogger} selectedSensor={selectedSensor} setSelectedSensor={setSelectedSensor} /> : <p>Cargando sensores...</p>}
+        {datalogger ? <TablaSensores sensores={datalogger} selectedSensor={selectedSensor} setSelectedSensor={setSelectedSensor} onEliminar={eliminarSensor}/> : <p>Cargando sensores...</p>}
         <Pagination
           currentPage={sensoresPagination.current_page}
           totalPages={sensoresPagination.total_pages}
@@ -122,6 +173,7 @@ const handlePageChange = (newPage) => {
           onPageChange={handlePageChange}
         />
       </div>
+      <FormSensor onSubmit={crearSensor} showForm={showForm} setShowForm={setShowForm} datalogger={id_datalogger}/>
     </div>
   )
 }

@@ -8,7 +8,7 @@ const data = [
 ];
 
 const RADIAN = Math.PI / 180;
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#FF4560'];
 
 const renderCustomizedLabel = (props) => {
   const {
