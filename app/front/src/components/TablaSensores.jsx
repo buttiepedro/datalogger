@@ -35,9 +35,11 @@ export default function TablaSensores({ sensores, error, loading, selectedSensor
           <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
             Fecha Ultima Medicion
           </th>
+          {user.isSuperuser || user.isAdmin ?
           <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
             Acciones
           </th>
+          : <></>}
         </tr>
       </thead>
       <tbody className="bg-white divide-y divide-gray-200">
@@ -79,6 +81,7 @@ export default function TablaSensores({ sensores, error, loading, selectedSensor
               minute: '2-digit',
               second: '2-digit',
             }) : ''}</td>
+            {user.isSuperuser || user.isAdmin ?
             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 flex justify-center">
               <button
                 onClick={(event) => {
@@ -92,6 +95,7 @@ export default function TablaSensores({ sensores, error, loading, selectedSensor
                 </svg>
               </button>
             </td>
+            : <></>}
           </tr>
         ))}
         

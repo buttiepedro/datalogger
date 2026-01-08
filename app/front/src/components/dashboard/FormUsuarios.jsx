@@ -15,7 +15,7 @@ export default function FormUsuarios({empresas, onSubmit , superUsuario, showFor
       <div className="mx-auto w-full max-w-[550px] bg-white p-8 rounded-lg shadow-lg">
         <form onSubmit={onSubmit} className="relative z-20">
           <div className="absolute right-0">
-            <button onClick={() => (resetForm(), setShowForm(!showForm), document.body.style.overflow = showForm ? "auto" : "hidden")} id="close-button" type="button" className="text-gray-400 hover:text-gray-600">
+            <button onClick={() => (resetForm(), setShowForm(!showForm), document.body.style.overflow = showForm ? "auto" : "hidden")} id="close-button" type="button" className="text-gray-400 hover:text-gray-600 cursor-pointer">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
               </svg>

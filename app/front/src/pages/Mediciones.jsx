@@ -11,6 +11,7 @@ export default function Mediciones() {
   useEffect(() => {
     api.get("/mediciones/")
       .then(res => {
+        console.log(res.data)
         setMediciones(res.data)
       })
       .catch(err => {
@@ -25,7 +26,7 @@ export default function Mediciones() {
   useEffect(() => {
     api.get("/dataloggers/")
       .then(res => {
-        setDataloggers(res.data)
+        setDataloggers(res.data.dataloggers)
       })
       .catch(err => {
         console.error(err)
@@ -46,7 +47,18 @@ export default function Mediciones() {
     }
     api.post("/mediciones/", nuevaMedicion)
       .then(res => {
+         api.get("/mediciones/")
+      .then(res => {
+        console.log(res.data)
         setMediciones([...mediciones, res.data])
+      })
+      .catch(err => {
+        console.error(err)
+        setError("Error cargando mediciones")
+      })
+      .finally(() => {
+        setLoading(false)
+      })
       })
       .catch(err => {
         console.error(err)

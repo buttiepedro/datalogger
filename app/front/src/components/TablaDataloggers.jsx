@@ -35,9 +35,11 @@ export default function TablaDataloggers({ dataloggers, error, loading, sensores
           <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
             Cant. de Sensores
           </th>
+          {user.isSuperuser || user.isAdmin ?
           <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
             Accion
           </th>
+          : <></>}
         </tr>
       </thead>
       <tbody className="bg-white divide-y divide-gray-200">
@@ -81,6 +83,7 @@ export default function TablaDataloggers({ dataloggers, error, loading, sensores
               })}
               {countSensores}
             </td>
+            {user.isSuperuser || user.isAdmin ?
             <td className="px-6 py-4 whitespace-nowrap text-right text-sm  font-medium">
               <button onClick={(event) => {
                 event.stopPropagation();
@@ -91,6 +94,7 @@ export default function TablaDataloggers({ dataloggers, error, loading, sensores
                 </svg>
               </button>
             </td>
+            : <></>}
           </tr>
         )})}
       </tbody>

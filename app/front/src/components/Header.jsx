@@ -36,17 +36,21 @@ export default function Header() {
         </div>
         <div className="hidden sm:ml-6 sm:block">
           <div className="flex space-x-4">
+            {user.isSuperuser || user.isAdmin ?
             <span className={location.pathname === "/dashboard" ? tabActivo : tanInactivo}>
               <NavLink to="/dashboard" aria-current="page">Dashboard</NavLink>
             </span>
+            : <></>}
             {user.isSuperuser ?
             <span className={location.pathname === "/tipos-de-sensores" ? tabActivo : tanInactivo}>
               <NavLink to="/tipos-de-sensores" aria-current="page">Tipos de Sensores</NavLink>
             </span>
             : <></>}
+            {user.isSuperuser || user.isAdmin ?
             <span className={location.pathname === "/mediciones" ? tabActivo : tanInactivo}>
               <NavLink to="/mediciones">Mediciones</NavLink>
             </span>
+            : <></>}
             <span className={location.pathname === "/dataloggers" ? tabActivo : tanInactivo}>
               <NavLink to="/dataloggers">Dataloggers</NavLink>
             </span>
