@@ -16,7 +16,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . /app
 
 # exponer puerto
-EXPOSE 8000
+EXPOSE 80
 
 # comando por defecto (gunicorn)
 CMD ["gunicorn", "app:app", "-b", "0.0.0.0:8000", "--workers", "2", "--threads", "4"]
