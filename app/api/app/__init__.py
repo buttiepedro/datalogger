@@ -7,6 +7,10 @@ from flask_jwt_extended import JWTManager
 
 jwt = JWTManager()
 
+@app.route("/")
+def health():
+    return {"status": "ok"}, 200
+
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
