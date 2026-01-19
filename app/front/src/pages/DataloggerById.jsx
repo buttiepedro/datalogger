@@ -2,7 +2,6 @@ import { useState, useContext, useEffect, use } from 'react'
 import { useParams, useNavigate, data } from 'react-router-dom';
 import { AuthContext } from "../context/AuthContext";
 import api from '../services/api';
-import MiPieChart from '../components/graficos/MiPieChart.jsx';
 import MiGrafico from '../components/graficos/MiGrafico.jsx';
 import TablaSensores from '../components/TablaSensores.jsx';
 import Pagination from '../components/Pagination.jsx';
@@ -160,7 +159,6 @@ const handlePageChange = (newPage) => {
           </svg>
         </button>
         <span className='flex'>
-          <MiPieChart datos={datalogger}/>
           <MiGrafico mediciones={graficoSensor(sensor)}/>
         </span>
         <h3 className="text-2xl font-bold tracking-tight text-sky-900 mt-6">Sensores Asociados:</h3>  
