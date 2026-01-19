@@ -46,11 +46,6 @@ export default function Header() {
               <NavLink to="/tipos-de-sensores" aria-current="page">Tipos de Sensores</NavLink>
             </span>
             : <></>}
-            {user.isSuperuser || user.isAdmin ?
-            <span className={location.pathname === "/mediciones" ? tabActivo : tanInactivo}>
-              <NavLink to="/mediciones">Mediciones</NavLink>
-            </span>
-            : <></>}
             <span className={location.pathname === "/dataloggers" ? tabActivo : tanInactivo}>
               <NavLink to="/dataloggers">Dataloggers</NavLink>
             </span>

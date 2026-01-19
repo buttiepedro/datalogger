@@ -23,7 +23,6 @@ export default function AppRoutes() {
         <Route element={<ProtectedRoute />}>
           <Route path="/dataloggers" element={<Dataloggers />} />
           <Route path="/dataloggers/:id_datalogger" element={<DataloggerById />} />
-          <Route path="/mediciones" element={<Mediciones />} />
         </Route>
 
         {/* Rutas solo para ADMINS de empresa o Superusers */}

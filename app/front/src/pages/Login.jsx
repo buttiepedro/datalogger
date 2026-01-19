@@ -78,7 +78,7 @@ export default function Login() {
                 </label>
                 <div className="text-sm">
                   <a href="#" className="font-semibold text-indigo-400 hover:text-indigo-300">
-                    Olvidaste tu contraseña? Que boludo
+                    Olvidaste tu contraseña? haz clic aquí
                   </a>
                 </div>
               </div>
